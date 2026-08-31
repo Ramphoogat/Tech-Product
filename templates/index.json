@@ -14,19 +14,40 @@
       "blocks": {
         "heading": {
           "type": "heading",
-          "settings": { "heading": "Built for the way you work" }
+          "settings": {
+            "heading": "Built for the way you work"
+          }
         },
         "text": {
           "type": "text",
-          "settings": { "text": "<p>Ships worldwide with region-correct power adapters and local warranty cover.</p>" }
+          "settings": {
+            "text": "<p>Ships worldwide with region-correct power adapters and local warranty cover.</p>"
+          }
         },
         "buttons": {
           "type": "buttons",
-          "settings": { "button_label_1": "Shop now", "button_label_2": "" }
+          "settings": {
+            "button_label_1": "Shop now",
+            "button_link_1": "",
+            "button_label_2": "",
+            "button_link_2": ""
+          }
         }
       },
-      "block_order": ["heading", "text", "buttons"],
+      "block_order": [
+        "heading",
+        "text",
+        "buttons"
+      ],
       "settings": {
+        "section_background": "",
+        "section_padding_top": 0,
+        "section_padding_bottom": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 0,
+        "section_width": "page",
+        "section_min_height": 0,
+        "section_corner_radius": 0,
         "height": "large",
         "content_alignment": "start",
         "overlay_opacity": 35,
@@ -36,15 +57,66 @@
     "categories": {
       "type": "collection-list",
       "blocks": {
-        "collection-1": { "type": "featured_collection", "settings": { "collection": "audio-1" } },
-        "collection-2": { "type": "featured_collection", "settings": { "collection": "smart-watches-1" } },
-        "collection-3": { "type": "featured_collection", "settings": { "collection": "headphones-headsets-1" } },
-        "collection-4": { "type": "featured_collection", "settings": { "collection": "accessories-1" } },
-        "collection-5": { "type": "featured_collection", "settings": { "collection": "earplugs-1" } },
-        "collection-6": { "type": "featured_collection", "settings": { "collection": "gift-stores-1" } }
+        "collection-1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "audio-1",
+            "heading": ""
+          }
+        },
+        "collection-2": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "smart-watches-1",
+            "heading": ""
+          }
+        },
+        "collection-3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "headphones-headsets-1",
+            "heading": ""
+          }
+        },
+        "collection-4": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "accessories-1",
+            "heading": ""
+          }
+        },
+        "collection-5": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earplugs-1",
+            "heading": ""
+          }
+        },
+        "collection-6": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-stores-1",
+            "heading": ""
+          }
+        }
       },
-      "block_order": ["collection-1", "collection-2", "collection-3", "collection-4", "collection-5", "collection-6"],
+      "block_order": [
+        "collection-1",
+        "collection-2",
+        "collection-3",
+        "collection-4",
+        "collection-5",
+        "collection-6"
+      ],
       "settings": {
+        "section_background": "#FFFFFF",
+        "section_padding_top": 0,
+        "section_padding_bottom": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 0,
+        "section_width": "page",
+        "section_min_height": 0,
+        "section_corner_radius": 0,
         "heading": "Shop by category",
         "columns_desktop": 4,
         "show_view_all": true,
@@ -54,6 +126,14 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
+        "section_background": "",
+        "section_padding_top": 0,
+        "section_padding_bottom": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 0,
+        "section_width": "page",
+        "section_min_height": 0,
+        "section_corner_radius": 0,
         "heading": "New this season",
         "collection": "new-this-season",
         "products_to_show": 8,
@@ -63,70 +143,11 @@
         "enable_compare": true,
         "color_scheme": "default"
       }
-    },
-    "promises": {
-      "type": "multicolumn",
-      "blocks": {
-        "column-1": {
-          "type": "column",
-          "settings": {
-            "icon": "truck",
-            "heading": "Ships from a local warehouse",
-            "text": "<p>Describe the delivery promise you can keep in this market.</p>",
-            "countries": ""
-          }
-        },
-        "column-2": {
-          "type": "column",
-          "settings": {
-            "icon": "shield",
-            "heading": "Local warranty",
-            "text": "<p>State the warranty length that applies where the customer is.</p>",
-            "countries": ""
-          }
-        },
-        "column-3": {
-          "type": "column",
-          "settings": {
-            "icon": "plug",
-            "heading": "Correct plug in the box",
-            "text": "<p>Every order ships with the plug and voltage standard for its destination.</p>",
-            "countries": ""
-          }
-        },
-        "column-4": {
-          "type": "column",
-          "settings": {
-            "icon": "support",
-            "heading": "Support in your language",
-            "text": "<p>Say which languages your support team covers.</p>",
-            "countries": ""
-          }
-        }
-      },
-      "block_order": ["column-1", "column-2", "column-3", "column-4"],
-      "settings": {
-        "heading": "Why buy from us",
-        "columns_desktop": 4,
-        "columns_mobile": "1",
-        "color_scheme": "subdued"
-      }
-    },
-    "story": {
-      "type": "rich-text",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": { "heading": "Engineered here, supported everywhere" }
-        },
-        "text": {
-          "type": "text",
-          "settings": { "text": "<p>Say something about your brand.</p>" }
-        }
-      },
-      "block_order": ["heading", "text"],
-      "settings": { "alignment": "center", "color_scheme": "default" }
     }
   },
-  "order": ["hero", "categories", "featured", "promises", "story"]
+  "order": [
+    "hero",
+    "categories",
+    "featured"
+  ]
 }
