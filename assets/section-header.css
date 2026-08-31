@@ -1,3 +1,14 @@
+/*
+ * Custom elements default to display: inline in browsers that have no
+ * built-in styles for them. sticky-header wraps the whole header, so left
+ * as inline it can silently break the section's background color, width,
+ * and position: sticky (sticky positioning is unreliable on inline boxes).
+ */
+sticky-header {
+  display: block;
+  width: 100%;
+}
+
 .header-wrapper {
   position: relative;
   z-index: 40;

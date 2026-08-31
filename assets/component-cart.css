@@ -43,6 +43,37 @@ html[dir='rtl'] .cart-drawer__panel {
   transform: translateX(0);
 }
 
+.free-shipping-bar {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.free-shipping-bar__track {
+  height: 0.6rem;
+  border-radius: 1rem;
+  background-color: var(--color-background-subdued);
+  overflow: hidden;
+}
+
+.free-shipping-bar__fill {
+  height: 100%;
+  width: var(--free-shipping-progress, 0%);
+  background-color: var(--color-success);
+  border-radius: inherit;
+  transition: width var(--duration-default) ease;
+}
+
+.free-shipping-bar__message {
+  margin: 0.6rem 0 0;
+  font-size: 1.3rem;
+  color: var(--color-text-subdued);
+}
+
+.cart-footer__summary .free-shipping-bar {
+  padding: 0;
+  border: 0;
+}
+
 .cart-drawer__header {
   display: flex;
   align-items: center;
