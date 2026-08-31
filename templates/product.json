@@ -1,22 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": { "type": "vendor", "settings": {} },
-        "title": { "type": "title", "settings": {} },
-        "price": { "type": "price", "settings": {} },
-        "sku": { "type": "sku", "settings": {} },
-        "inventory": { "type": "inventory", "settings": {} },
-        "variant_picker": { "type": "variant_picker", "settings": {} },
+        "vendor": {
+          "type": "vendor",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "sku": {
+          "type": "sku",
+          "settings": {}
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
         "buy_buttons": {
           "type": "buy_buttons",
-          "settings": { "show_quantity": true, "show_dynamic_checkout": true }
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true
+          }
         },
-        "description": { "type": "description", "settings": {} },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
         "specifications": {
           "type": "specifications",
-          "settings": { "heading": "Specifications" }
+          "settings": {
+            "heading": "Specifications"
+          }
         },
         "shipping": {
           "type": "market_info",
@@ -67,7 +102,7 @@
         "power"
       ],
       "settings": {
-        "media_size": "large",
+        "media_size": "small",
         "enable_sticky_info": true
       }
     },
@@ -75,6 +110,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "You might also like",
+        "collection": "",
         "products_to_show": 4,
         "columns_desktop": 4,
         "columns_mobile": "2",
@@ -84,5 +120,8 @@
       }
     }
   },
-  "order": ["main", "related"]
+  "order": [
+    "main",
+    "related"
+  ]
 }
