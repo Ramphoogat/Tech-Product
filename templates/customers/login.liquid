@@ -1,0 +1,42 @@
+<div class="customer section-padding">
+  <div class="page-width page-width--narrow">
+    <h1 class="h3">{{ 'customer.login_page.title' | t }}</h1>
+
+    {%- form 'customer_login', novalidate: 'novalidate' -%}
+      {{ form.errors | default_errors }}
+
+      <div class="field">
+        <label class="form__label" for="CustomerEmail">{{ 'customer.login_page.email' | t }}</label>
+        <input class="input" type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" required>
+      </div>
+
+      {%- if form.password_needed -%}
+        <div class="field">
+          <label class="form__label" for="CustomerPassword">{{ 'customer.login_page.password' | t }}</label>
+          <input class="input" type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+        </div>
+        <a href="#recover" class="link">{{ 'customer.login_page.forgot_password' | t }}</a>
+      {%- endif -%}
+
+      <button type="submit" class="button button--primary">{{ 'customer.login_page.sign_in' | t }}</button>
+      <p><a href="{{ routes.account_register_url }}" class="link">{{ 'customer.login_page.create_account' | t }}</a></p>
+    {%- endform -%}
+
+    <div id="recover" class="customer__recover">
+      <h2 class="h5">{{ 'customer.recover_password.title' | t }}</h2>
+      <p>{{ 'customer.recover_password.subtext' | t }}</p>
+
+      {%- form 'recover_customer_password' -%}
+        {{ form.errors | default_errors }}
+        {%- if form.posted_successfully? -%}
+          <p class="form__message form__message--success" role="status">{{ 'customer.recover_password.success' | t }}</p>
+        {%- endif -%}
+        <div class="field">
+          <label class="form__label" for="RecoverEmail">{{ 'customer.login_page.email' | t }}</label>
+          <input class="input" type="email" name="email" id="RecoverEmail" autocomplete="email" required>
+        </div>
+        <button type="submit" class="button button--primary">{{ 'customer.recover_password.submit' | t }}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</div>

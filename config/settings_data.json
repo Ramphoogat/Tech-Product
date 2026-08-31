@@ -1,0 +1,25 @@
+{
+  "current": {
+    "brand_name": "Circuit",
+    "currency_code_enabled": true,
+    "show_country_selector": true,
+    "show_language_selector": true,
+    "show_currency_in_country_selector": true,
+    "show_tax_and_shipping_note": true,
+    "show_hreflang_tags": true,
+    "cart_type": "drawer",
+    "enable_compare": true,
+    "compare_limit": 4,
+    "predictive_search_enabled": true,
+    "show_inventory_status": true,
+    "show_inventory_quantity": true,
+    "low_inventory_threshold": 10
+  },
+  "presets": {
+    "Default": {
+      "currency_code_enabled": true,
+      "cart_type": "drawer",
+      "enable_compare": true
+    }
+  }
+}

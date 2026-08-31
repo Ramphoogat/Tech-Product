@@ -1,0 +1,46 @@
+{{ 'section-collection-banner.css' | asset_url | stylesheet_tag }}
+
+<div class="collection-banner color-{{ section.settings.color_scheme }}{% if section.settings.show_image and collection.image %} collection-banner--with-image{% endif %}">
+  {%- if section.settings.show_image and collection.image -%}
+    <div class="collection-banner__media">
+      {% render 'responsive-image',
+        image: collection.image,
+        sizes: '100vw',
+        loading: 'eager',
+        fetchpriority: 'high',
+        class: 'collection-banner__image'
+      %}
+    </div>
+  {%- endif -%}
+
+  <div class="page-width collection-banner__content">
+    <h1 class="collection-banner__title h1">{{ collection.title | escape }}</h1>
+
+    {%- if section.settings.show_description and collection.description != blank -%}
+      <div class="collection-banner__description rte">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show collection image", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "subdued", "label": "Subdued" },
+        { "value": "inverse", "label": "Inverse" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,78 @@
+{%- comment -%}
+  Add to cart / dynamic checkout.
+  Accepts: product, section_id, product_form_id, show_dynamic_checkout, show_quantity.
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign sold_out = false
+  unless variant.available
+    assign sold_out = true
+  endunless
+
+  assign is_pre_order = false
+  if variant.available and variant.inventory_management != blank and variant.inventory_quantity <= 0
+    assign is_pre_order = true
+  endif
+-%}
+
+<product-form class="product-form" data-section="{{ section_id }}">
+  <div class="product-form__error form__message" role="alert" hidden></div>
+
+  {%- form 'product',
+    product,
+    id: product_form_id,
+    class: 'form product-form__form',
+    novalidate: 'novalidate'
+  -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      data-variant-id
+      {% if product.variants.size == 0 %}disabled{% endif %}
+    >
+
+    <div class="product-form__row">
+      {%- if show_quantity -%}
+        <div class="product-form__quantity">
+          <label class="form__label" for="Quantity-{{ section_id }}">
+            {{- 'products.product.quantity.label' | t -}}
+          </label>
+          {% render 'quantity-input',
+            id: 'Quantity-' | append: section_id,
+            name: 'quantity',
+            value: 1,
+            min: 1,
+            product_title: product.title,
+            form_id: product_form_id
+          %}
+        </div>
+      {%- endif -%}
+
+      <button
+        type="submit"
+        name="add"
+        class="button button--primary product-form__submit"
+        {% if sold_out or product.variants.size == 0 %}disabled{% endif %}
+      >
+        <span class="button__label">
+          {%- if product.variants.size == 0 -%}
+            {{ 'products.product.unavailable' | t }}
+          {%- elsif sold_out -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- elsif is_pre_order -%}
+            {{ 'products.product.pre_order' | t }}
+          {%- else -%}
+            {{ 'products.product.add_to_cart' | t }}
+          {%- endif -%}
+        </span>
+        <span class="button__spinner" aria-hidden="true" hidden></span>
+      </button>
+    </div>
+
+    {%- if show_dynamic_checkout -%}
+      <div class="product-form__dynamic">{{ form | payment_button }}</div>
+    {%- endif -%}
+  {%- endform -%}
+</product-form>

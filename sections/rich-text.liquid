@@ -1,0 +1,82 @@
+<div class="rich-text section-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width page-width--narrow rich-text__inner rich-text__inner--{{ section.settings.alignment }}">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="h3" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+        {%- when 'text' -%}
+          <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'button' -%}
+          {%- if block.settings.button_label != blank -%}
+            {%- capture rich_text_href -%}
+              {%- render 'localized-url', url: block.settings.button_link -%}
+            {%- endcapture -%}
+            <a href="{{ rich_text_href }}" class="button button--primary" {{ block.shopify_attributes }}>
+              {{- block.settings.button_label -}}
+            </a>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "center",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "subdued", "label": "Subdued" },
+        { "value": "inverse", "label": "Inverse" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Engineered here, supported everywhere" }]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [{ "type": "richtext", "id": "text", "label": "Text", "default": "<p>Say something about your brand.</p>" }]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Learn more" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "blocks": [{ "type": "heading" }, { "type": "text" }]
+    }
+  ]
+}
+{% endschema %}

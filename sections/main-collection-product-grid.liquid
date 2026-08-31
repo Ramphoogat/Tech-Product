@@ -1,0 +1,102 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign show_compare = false
+  if settings.enable_compare and section.settings.enable_compare
+    assign show_compare = true
+  endif
+-%}
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+  <div class="collection section-padding" id="Collection-{{ section.id }}">
+    <div class="page-width">
+      <div class="facets-layout">
+        <div class="facets-wrapper" id="FacetsContainer-{{ section.id }}">
+          {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+            {% render 'facets',
+              results: collection,
+              section_id: section.id,
+              enable_sorting: section.settings.enable_sorting,
+              results_count: collection.products_count
+            %}
+          {%- endif -%}
+        </div>
+
+        <div class="collection__results" id="ProductGridContainer-{{ section.id }}">
+          {%- if collection.products.size == 0 -%}
+            <div class="collection__empty">
+              <p class="h4">{{ 'sections.collection_template.empty' | t }}</p>
+              <a href="{{ collection.url }}" class="link">
+                {{- 'sections.collection_template.use_fewer_filters' | t -}}
+              </a>
+            </div>
+          {%- else -%}
+            <ul
+              class="grid product-grid"
+              role="list"
+              style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: {{ section.settings.columns_mobile }};"
+            >
+              {%- for product in collection.products -%}
+                {%- liquid
+                  assign card_loading = 'lazy'
+                  if forloop.index <= section.settings.columns_desktop
+                    assign card_loading = 'eager'
+                  endif
+                -%}
+                <li class="grid__item">
+                  {% render 'card-product',
+                    product: product,
+                    show_compare: show_compare,
+                    image_loading: card_loading,
+                    sizes: '(min-width: 990px) calc(var(--page-width) / 5), (min-width: 750px) 33vw, 50vw'
+                  %}
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            {% render 'pagination', paginate: paginate, anchor: '#Collection-' | append: section.id %}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Product grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "label": "Products per page", "default": 24 },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "default": "2",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true,
+      "info": "Filters are configured in the Search & Discovery app."
+    },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
+    {
+      "type": "checkbox",
+      "id": "enable_compare",
+      "label": "Show compare checkbox on cards",
+      "default": true,
+      "info": "Requires product comparison to be enabled in Theme settings."
+    }
+  ]
+}
+{% endschema %}

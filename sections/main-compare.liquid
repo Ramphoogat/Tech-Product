@@ -1,0 +1,45 @@
+{{ 'component-compare.css' | asset_url | stylesheet_tag }}
+
+<div class="compare-page section-padding">
+  <div class="page-width">
+    <h1 class="h2">{{ section.settings.heading | default: page.title }}</h1>
+
+    {%- if section.settings.subheading != blank -%}
+      <div class="rte">{{ section.settings.subheading }}</div>
+    {%- endif -%}
+
+    <compare-table class="compare-table-wrapper">
+      <p class="compare-page__status" data-compare-loading hidden>
+        {{- 'products.compare.loading' | t -}}
+      </p>
+
+      <div class="compare-page__empty" data-compare-empty>
+        <p class="h4">{{ 'products.compare.empty_title' | t }}</p>
+        <p>{{ 'products.compare.empty_text' | t }}</p>
+        {%- if section.settings.browse_link != blank -%}
+          {%- capture browse_href -%}
+            {%- render 'localized-url', url: section.settings.browse_link -%}
+          {%- endcapture -%}
+          <a href="{{ browse_href }}" class="button button--primary">
+            {{- 'products.compare.add_more' | t -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="compare-page__output" data-compare-output></div>
+    </compare-table>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product comparison",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Compare products" },
+    { "type": "richtext", "id": "subheading", "label": "Subheading" },
+    { "type": "url", "id": "browse_link", "label": "Keep shopping link" }
+  ]
+}
+{% endschema %}

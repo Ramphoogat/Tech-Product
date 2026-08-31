@@ -1,0 +1,29 @@
+<div class="gift-card section-padding">
+  <div class="page-width page-width--narrow gift-card__inner">
+    <h1 class="h3">
+      {{ 'gift_cards.issued.title' | t: value: gift_card.initial_value | money, shop: shop.name }}
+    </h1>
+
+    {%- if gift_card.expired -%}
+      <p class="form__message" role="status">{{ 'gift_cards.issued.expired' | t }}</p>
+    {%- else -%}
+      <p class="caption">{{ 'gift_cards.issued.active' | t }}</p>
+    {%- endif -%}
+
+    {%- if gift_card.balance != gift_card.initial_value -%}
+      <p class="caption">
+        {{- 'gift_cards.issued.remaining_html' | t: balance: gift_card.balance | money -}}
+      </p>
+    {%- endif -%}
+
+    <p class="gift-card__code"><code>{{ gift_card.code | format_code }}</code></p>
+    <p>{{ 'gift_cards.issued.redeem' | t }}</p>
+
+    <div class="gift-card__actions">
+      <a href="{{ shop.url }}" class="button button--primary">{{ 'gift_cards.issued.shop_link' | t }}</a>
+      <button type="button" class="button button--secondary" data-print>
+        {{- 'gift_cards.issued.print' | t -}}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main-cart-items": { "type": "main-cart-items", "settings": {} },
+    "main-cart-footer": {
+      "type": "main-cart-footer",
+      "settings": { "show_login_prompt": true }
+    }
+  },
+  "order": ["main-cart-items", "main-cart-footer"]
+}

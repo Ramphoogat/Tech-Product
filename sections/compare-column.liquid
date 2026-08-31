@@ -1,0 +1,76 @@
+{%- comment -%}
+  One product column for the comparison table.
+
+  Requested by compare.js as <product url>?section_id=compare-column, which
+  means every value in it — price, availability, spec labels and spec values —
+  is rendered by Shopify in the shopper's active language and market currency.
+  Not meant to be added to a template.
+{%- endcomment -%}
+
+{%- liquid
+  assign rows = product.metafields.specs.rows.value
+  assign variant = product.selected_or_first_available_variant
+  assign default_group = 'products.product.specifications.default_group' | t
+-%}
+
+<div
+  class="compare-column"
+  data-handle="{{ product.handle }}"
+  data-title="{{ product.title | escape }}"
+  data-url="{{ product.url }}"
+>
+  <div class="compare-column__header">
+    <a href="{{ product.url }}" class="compare-column__media">
+      {%- if product.featured_media -%}
+        {% render 'responsive-image',
+          image: product.featured_media.preview_image,
+          sizes: '220px',
+          widths: '220,440,660'
+        %}
+      {%- endif -%}
+    </a>
+    <a href="{{ product.url }}" class="compare-column__title">{{ product.title | escape }}</a>
+  </div>
+
+  <div class="compare-column__specs">
+    <div class="compare-spec" data-label="{{ 'products.compare.row_price' | t | escape }}">
+      <span class="compare-spec__value">
+        {% render 'price', product: product, use_variant: true %}
+      </span>
+    </div>
+
+    <div class="compare-spec" data-label="{{ 'products.compare.row_availability' | t | escape }}">
+      <span class="compare-spec__value">
+        {% render 'stock-status', variant: variant %}
+      </span>
+    </div>
+
+    {%- if product.vendor != blank -%}
+      <div class="compare-spec" data-label="{{ 'products.compare.row_vendor' | t | escape }}">
+        <span class="compare-spec__value">{{ product.vendor }}</span>
+      </div>
+    {%- endif -%}
+
+    {%- for row in rows -%}
+      <div
+        class="compare-spec"
+        data-label="{{ row.label.value | escape }}"
+        data-group="{{ row.group.value | default: default_group | escape }}"
+      >
+        <span class="compare-spec__value">{{ row.value.value }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="compare-column__footer">
+    <a href="{{ product.url }}" class="button button--secondary button--full">
+      {{- 'products.compare.view_product' | t -}}
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Compare column"
+}
+{% endschema %}

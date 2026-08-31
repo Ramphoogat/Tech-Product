@@ -1,0 +1,84 @@
+{%- comment -%}
+  Product media gallery: one visible stage plus a thumbnail rail.
+  Thumbnails are real buttons in a roving-tabindex list, so the gallery is
+  operable with Tab and the arrow keys.
+  Accepts: product, section_id.
+{%- endcomment -%}
+
+<media-gallery class="media-gallery" data-section="{{ section_id }}">
+  <div class="media-gallery__stage">
+    {%- if product.media.size == 0 -%}
+      {{ 'product-1' | placeholder_svg_tag: 'media-gallery__placeholder placeholder-svg' }}
+    {%- endif -%}
+
+    {%- for media in product.media -%}
+      {%- liquid
+        assign media_loading = 'lazy'
+        assign media_priority = 'auto'
+        if forloop.first
+          assign media_loading = 'eager'
+          assign media_priority = 'high'
+        endif
+      -%}
+      <div
+        class="media-gallery__item"
+        data-media-id="{{ media.id }}"
+        {% unless forloop.first %}hidden{% endunless %}
+      >
+        {%- case media.media_type -%}
+          {%- when 'image' -%}
+            {% render 'responsive-image',
+              image: media.preview_image,
+              sizes: '(min-width: 990px) 55vw, 100vw',
+              loading: media_loading,
+              fetchpriority: media_priority,
+              class: 'media-gallery__image'
+            %}
+          {%- when 'video' -%}
+            {{ media | video_tag: controls: true, preload: 'metadata', class: 'media-gallery__video' }}
+          {%- when 'external_video' -%}
+            <div class="media-gallery__external-video">{{ media | external_video_tag: loading: 'lazy' }}</div>
+          {%- else -%}
+            {% render 'responsive-image',
+              image: media.preview_image,
+              sizes: '(min-width: 990px) 55vw, 100vw',
+              class: 'media-gallery__image'
+            %}
+        {%- endcase -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if product.media.size > 1 -%}
+    <ul
+      class="media-gallery__thumbs"
+      role="list"
+      aria-label="{{ 'products.product.media.gallery_viewer' | t | escape }}"
+    >
+      {%- for media in product.media -%}
+        <li class="media-gallery__thumb-item">
+          <button
+            type="button"
+            class="media-gallery__thumb"
+            data-media-id="{{ media.id }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            aria-label="{{ 'products.product.media.thumbnail_label' | t: index: forloop.index, total: product.media.size | escape }}"
+          >
+            {% render 'responsive-image',
+              image: media.preview_image,
+              sizes: '90px',
+              widths: '90,180,270',
+              class: 'media-gallery__thumb-image'
+            %}
+            {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              <span class="media-gallery__thumb-badge" aria-hidden="true">
+                {% render 'icon', icon: 'play' %}
+              </span>
+            {%- endif -%}
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</media-gallery>

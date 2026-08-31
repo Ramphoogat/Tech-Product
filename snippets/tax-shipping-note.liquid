@@ -1,0 +1,28 @@
+{%- comment -%}
+  Tax, duty and shipping note.
+
+  `cart.taxes_included` and `cart.duties_included` are market-aware, so a
+  visitor shopping a tax-inclusive market (most of the EU, UK, AU) sees a
+  different note from a visitor shopping a tax-exclusive one (US, CA).
+{%- endcomment -%}
+
+{%- if settings.show_tax_and_shipping_note -%}
+  <p class="tax-note caption">
+    {%- if cart.taxes_included -%}
+      {{ 'products.product.tax_and_shipping.taxes_included' | t }}
+    {%- else -%}
+      {{ 'products.product.tax_and_shipping.taxes_excluded' | t }}
+    {%- endif -%}
+
+    {%- if cart.duties_included -%}
+      {{ ' ' }}{{ 'products.product.tax_and_shipping.duties_included' | t }}
+    {%- endif -%}
+
+    {{ ' ' }}
+    {%- if shop.shipping_policy.url != blank -%}
+      {{ 'products.product.tax_and_shipping.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+    {%- else -%}
+      {{ 'products.product.tax_and_shipping.shipping_at_checkout' | t }}
+    {%- endif -%}
+  </p>
+{%- endif -%}

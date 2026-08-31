@@ -1,0 +1,83 @@
+{%- comment -%}
+  Renders price, compare-at price and unit price for a product or variant.
+
+  All amounts go through Shopify money filters, so the currency and the number
+  format follow the active market rather than anything stored in the theme.
+  When "Show currency codes" is on, money_with_currency is used instead, which
+  is what you want as soon as two markets share a symbol (USD / CAD / AUD).
+
+  Accepts: product, use_variant, price_class, show_badges.
+{%- endcomment -%}
+
+{%- liquid
+  if use_variant and product.selected_or_first_available_variant != blank
+    assign target = product.selected_or_first_available_variant
+  else
+    assign target = product
+  endif
+
+  assign price = target.price | default: 0
+  assign compare_at = target.compare_at_price
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+  endif
+
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_compare_at = compare_at | money_with_currency
+  else
+    assign money_price = price | money
+    assign money_compare_at = compare_at | money
+  endif
+
+  assign show_from = false
+  unless use_variant
+    if product.price_varies
+      assign show_from = true
+    endif
+  endunless
+-%}
+
+<div class="price {% if on_sale %}price--on-sale{% endif %} {% unless target.available %}price--unavailable{% endunless %} {{ price_class }}">
+  <div class="price__container">
+    {%- if on_sale -%}
+      <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+      <span class="price-item price-item--sale">
+        {%- if show_from -%}
+          {{ 'products.product.price.from_price' | t: price: money_price }}
+        {%- else -%}
+          {{ money_price }}
+        {%- endif -%}
+      </span>
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      <s class="price-item price-item--compare">{{ money_compare_at }}</s>
+    {%- else -%}
+      <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      <span class="price-item price-item--regular">
+        {%- if show_from -%}
+          {{ 'products.product.price.from_price' | t: price: money_price }}
+        {%- else -%}
+          {{ money_price }}
+        {%- endif -%}
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- if target.unit_price_measurement -%}
+    <div class="price__unit">
+      <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      {%- if settings.currency_code_enabled -%}
+        {{ target.unit_price | money_with_currency }}
+      {%- else -%}
+        {{ target.unit_price | money }}
+      {%- endif -%}
+      <span aria-hidden="true">/</span>
+      <span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+      {%- if target.unit_price_measurement.reference_value != 1 -%}
+        {{- target.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{ target.unit_price_measurement.reference_unit }}
+    </div>
+  {%- endif -%}
+</div>

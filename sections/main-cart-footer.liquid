@@ -1,0 +1,66 @@
+{%- unless cart == empty -%}
+  <div class="cart-footer section-padding">
+    <div class="page-width cart-footer__inner">
+      {%- if settings.cart_show_note -%}
+        <div class="cart-footer__note">
+          <label class="form__label" for="CartNote">{{ 'sections.cart.note' | t }}</label>
+          <textarea
+            id="CartNote"
+            class="input"
+            name="note"
+            form="CartPageForm"
+            rows="4"
+            placeholder="{{ 'sections.cart.note_placeholder' | t | escape }}"
+          >{{ cart.note }}</textarea>
+        </div>
+      {%- endif -%}
+
+      <div class="cart-footer__summary">
+        <h2 class="h5">{{ 'sections.cart.order_summary' | t }}</h2>
+
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <ul class="cart-footer__discounts caption" role="list">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <li>{{ discount.title }} (-{{ discount.total_allocated_amount | money }})</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        <div class="cart-footer__totals">
+          <span class="h6">{{ 'sections.cart.estimated_total' | t }}</span>
+          <span class="h4">
+            {%- if settings.currency_code_enabled -%}
+              {{ cart.total_price | money_with_currency }}
+            {%- else -%}
+              {{ cart.total_price | money }}
+            {%- endif -%}
+          </span>
+        </div>
+
+        {% render 'tax-shipping-note' %}
+
+        <button type="submit" name="checkout" form="CartPageForm" class="button button--primary button--full">
+          {{- 'sections.cart.checkout' | t -}}
+        </button>
+
+        {%- if section.settings.show_login_prompt and shop.customer_accounts_enabled and customer == nil -%}
+          <p class="cart-footer__login caption">
+            {{ 'sections.cart.login.title' | t }}
+            {{ 'sections.cart.login.paragraph_html' | t: link: routes.account_login_url }}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Cart footer",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_login_prompt", "label": "Show log in prompt", "default": true }
+  ]
+}
+{% endschema %}

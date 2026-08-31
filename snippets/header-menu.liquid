@@ -1,0 +1,66 @@
+{%- comment -%}
+  Desktop navigation, up to three levels.
+  Accepts: menu.
+{%- endcomment -%}
+
+<ul class="header__menu" role="list">
+  {%- for link in menu.links -%}
+    <li class="header__menu-item">
+      {%- if link.links.size > 0 -%}
+        <details-disclosure class="header__submenu">
+          <details>
+            <summary
+              class="header__menu-link"
+              {% if link.current or link.child_active %}aria-current="true"{% endif %}
+            >
+              <span>{{ link.title }}</span>
+              {% render 'icon', icon: 'chevron-down' %}
+            </summary>
+
+            <div class="mega-menu">
+              <div class="page-width mega-menu__inner">
+                <ul class="mega-menu__columns" role="list">
+                  {%- for child in link.links -%}
+                    <li class="mega-menu__column">
+                      <a
+                        href="{{ child.url }}"
+                        class="mega-menu__heading"
+                        {% if child.current %}aria-current="page"{% endif %}
+                      >
+                        {{- child.title -}}
+                      </a>
+
+                      {%- if child.links.size > 0 -%}
+                        <ul class="mega-menu__list" role="list">
+                          {%- for grandchild in child.links -%}
+                            <li>
+                              <a
+                                href="{{ grandchild.url }}"
+                                class="mega-menu__link"
+                                {% if grandchild.current %}aria-current="page"{% endif %}
+                              >
+                                {{- grandchild.title -}}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          </details>
+        </details-disclosure>
+      {%- else -%}
+        <a
+          href="{{ link.url }}"
+          class="header__menu-link"
+          {% if link.current %}aria-current="page"{% endif %}
+        >
+          {{- link.title -}}
+        </a>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

@@ -1,0 +1,124 @@
+{%- comment -%}
+  Country/region and language selectors backed by Shopify Markets.
+
+  Both use the built-in `localization` form, so switching a country changes the
+  market (and therefore currency, pricing, duties and available payment
+  methods), and switching a language moves the visitor to that locale root.
+  Accepts: id_prefix, show_labels.
+{%- endcomment -%}
+
+{%- liquid
+  assign show_country = false
+  assign show_language = false
+  if settings.show_country_selector and localization.available_countries.size > 1
+    assign show_country = true
+  endif
+  if settings.show_language_selector and localization.available_languages.size > 1
+    assign show_language = true
+  endif
+-%}
+
+{%- if show_country or show_language -%}
+  <div class="localization" role="group" aria-label="{{ 'localization.selector_label' | t | escape }}">
+    {%- if show_country -%}
+      {%- form 'localization', id: id_prefix | append: '-country-form', class: 'localization-form' -%}
+        <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+
+        <localization-form class="localization-form__field">
+          {%- if show_labels -%}
+            <span class="localization-form__label" id="{{ id_prefix }}-country-label">
+              {{- 'localization.country_heading' | t -}}
+            </span>
+          {%- endif -%}
+
+          <details class="disclosure">
+            <summary
+              class="disclosure__button"
+              aria-label="{{ 'localization.update_country' | t | escape }}"
+              {% if show_labels %}aria-describedby="{{ id_prefix }}-country-label"{% endif %}
+            >
+              {% render 'icon', icon: 'globe' %}
+              <span class="disclosure__current">
+                {%- if settings.show_currency_in_country_selector -%}
+                  {{- 'localization.currency_format'
+                    | t:
+                      country: localization.country.name,
+                      currency: localization.country.currency.iso_code
+                  -}}
+                {%- else -%}
+                  {{- localization.country.name -}}
+                {%- endif -%}
+              </span>
+              {% render 'icon', icon: 'chevron-down' %}
+            </summary>
+
+            <div class="disclosure__panel">
+              <ul class="disclosure__list" role="list">
+                {%- for country in localization.available_countries -%}
+                  <li class="disclosure__item">
+                    <button
+                      type="button"
+                      class="disclosure__link"
+                      data-value="{{ country.iso_code }}"
+                      {% if country.iso_code == localization.country.iso_code %}aria-current="true"{% endif %}
+                    >
+                      <span class="disclosure__name">{{ country.name }}</span>
+                      {%- if settings.show_currency_in_country_selector -%}
+                        <span class="disclosure__meta">
+                          {{- country.currency.iso_code }} {{ country.currency.symbol -}}
+                        </span>
+                      {%- endif -%}
+                    </button>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </details>
+        </localization-form>
+      {%- endform -%}
+    {%- endif -%}
+
+    {%- if show_language -%}
+      {%- form 'localization', id: id_prefix | append: '-language-form', class: 'localization-form' -%}
+        <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+
+        <localization-form class="localization-form__field">
+          {%- if show_labels -%}
+            <span class="localization-form__label" id="{{ id_prefix }}-language-label">
+              {{- 'localization.language_heading' | t -}}
+            </span>
+          {%- endif -%}
+
+          <details class="disclosure">
+            <summary
+              class="disclosure__button"
+              aria-label="{{ 'localization.update_language' | t | escape }}"
+              {% if show_labels %}aria-describedby="{{ id_prefix }}-language-label"{% endif %}
+            >
+              <span class="disclosure__current">{{ localization.language.endonym_name | capitalize }}</span>
+              {% render 'icon', icon: 'chevron-down' %}
+            </summary>
+
+            <div class="disclosure__panel">
+              <ul class="disclosure__list" role="list">
+                {%- for language in localization.available_languages -%}
+                  <li class="disclosure__item">
+                    <button
+                      type="button"
+                      class="disclosure__link"
+                      lang="{{ language.iso_code }}"
+                      data-value="{{ language.iso_code }}"
+                      {% if language.iso_code == localization.language.iso_code %}aria-current="true"{% endif %}
+                    >
+                      <span class="disclosure__name">{{ language.endonym_name | capitalize }}</span>
+                    </button>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </details>
+        </localization-form>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

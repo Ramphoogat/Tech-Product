@@ -1,0 +1,28 @@
+<div class="customer section-padding">
+  <div class="page-width page-width--narrow">
+    <h1 class="h3">{{ 'customer.register.title' | t }}</h1>
+
+    {%- form 'create_customer', novalidate: 'novalidate' -%}
+      {{ form.errors | default_errors }}
+
+      <div class="field">
+        <label class="form__label" for="RegisterFirstName">{{ 'customer.register.first_name' | t }}</label>
+        <input class="input" type="text" name="customer[first_name]" id="RegisterFirstName" autocomplete="given-name">
+      </div>
+      <div class="field">
+        <label class="form__label" for="RegisterLastName">{{ 'customer.register.last_name' | t }}</label>
+        <input class="input" type="text" name="customer[last_name]" id="RegisterLastName" autocomplete="family-name">
+      </div>
+      <div class="field">
+        <label class="form__label" for="RegisterEmail">{{ 'customer.register.email' | t }}</label>
+        <input class="input" type="email" name="customer[email]" id="RegisterEmail" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label class="form__label" for="RegisterPassword">{{ 'customer.register.password' | t }}</label>
+        <input class="input" type="password" name="customer[password]" id="RegisterPassword" autocomplete="new-password" required>
+      </div>
+
+      <button type="submit" class="button button--primary">{{ 'customer.register.submit' | t }}</button>
+    {%- endform -%}
+  </div>
+</div>

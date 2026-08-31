@@ -1,0 +1,78 @@
+{%- comment -%}
+  Emits the theme font faces and every design token as a CSS custom property.
+  base.css and every component stylesheet read from these, so a merchant can
+  restyle the whole theme from Theme settings without touching CSS.
+{%- endcomment -%}
+
+{{ settings.type_body_font | font_face: font_display: 'swap' }}
+{{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+{{ settings.type_body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+{{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+<style>
+  :root {
+    --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body-style: {{ settings.type_body_font.style }};
+    --font-body-weight: {{ settings.type_body_font.weight }};
+    --font-body-weight-bold: {{ settings.type_body_font.weight | plus: 300 | at_most: 1000 }};
+    --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+    --font-heading-style: {{ settings.type_header_font.style }};
+    --font-heading-weight: {{ settings.type_header_font.weight }};
+    --font-heading-transform: {{ settings.heading_transform }};
+
+    --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+
+    --color-background: {{ settings.color_background }};
+    --color-background-subdued: {{ settings.color_background_subdued }};
+    --color-text: {{ settings.color_text }};
+    --color-text-subdued: {{ settings.color_text_subdued }};
+    --color-border: {{ settings.color_border }};
+    --color-accent: {{ settings.color_accent }};
+    --color-accent-text: {{ settings.color_accent_text }};
+    --color-inverse-background: {{ settings.color_inverse_background }};
+    --color-inverse-text: {{ settings.color_inverse_text }};
+    --color-sale: {{ settings.color_sale }};
+    --color-success: {{ settings.color_success }};
+    --color-warning: {{ settings.color_warning }};
+    --color-overlay: {{ settings.color_inverse_background | color_modify: 'alpha', 0.55 }};
+
+    --page-width: {{ settings.page_width }}px;
+    --page-gutter: 1.5rem;
+    --spacing-sections: {{ settings.spacing_sections }}px;
+    --grid-gap: {{ settings.grid_gap }}px;
+    --corner-radius: {{ settings.corner_radius }}px;
+    --buttons-radius: {{ settings.buttons_radius }}px;
+    --buttons-border-width: {{ settings.buttons_border_width }}px;
+    --inputs-radius: {{ settings.inputs_radius }}px;
+
+    --duration-short: 120ms;
+    --duration-default: 220ms;
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+    --header-height: 0px;
+  }
+
+  .color-inverse {
+    --color-background: {{ settings.color_inverse_background }};
+    --color-background-subdued: {{ settings.color_inverse_background | color_lighten: 6 }};
+    --color-text: {{ settings.color_inverse_text }};
+    --color-text-subdued: {{ settings.color_inverse_text | color_modify: 'alpha', 0.72 }};
+    --color-border: {{ settings.color_inverse_text | color_modify: 'alpha', 0.24 }};
+  }
+
+  .color-subdued {
+    --color-background: {{ settings.color_background_subdued }};
+    --color-background-subdued: {{ settings.color_background }};
+  }
+
+  .color-accent {
+    --color-background: {{ settings.color_accent }};
+    --color-background-subdued: {{ settings.color_accent | color_darken: 6 }};
+    --color-text: {{ settings.color_accent_text }};
+    --color-text-subdued: {{ settings.color_accent_text | color_modify: 'alpha', 0.78 }};
+    --color-border: {{ settings.color_accent_text | color_modify: 'alpha', 0.3 }};
+    --color-accent: {{ settings.color_accent_text }};
+    --color-accent-text: {{ settings.color_accent }};
+  }
+</style>

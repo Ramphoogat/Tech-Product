@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-compare",
+      "settings": { "heading": "Compare products", "subheading": "" }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,59 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+{%- paginate blog.articles by section.settings.posts_per_page -%}
+  <div class="blog section-padding">
+    <div class="page-width">
+      <h1 class="h2">{{ blog.title | escape }}</h1>
+
+      <ul class="grid" role="list" style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: 1;">
+        {%- for article in blog.articles -%}
+          <li class="grid__item">
+            <article class="card card--article">
+              {%- if article.image -%}
+                <a href="{{ article.url }}" class="card__media" tabindex="-1" aria-hidden="true">
+                  {% render 'responsive-image',
+                    image: article.image,
+                    sizes: '(min-width: 990px) 33vw, 100vw',
+                    class: 'card__image'
+                  %}
+                </a>
+              {%- endif -%}
+              <div class="card__content">
+                <p class="caption">
+                  <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{- article.published_at | date: format: 'date' -}}
+                  </time>
+                  {%- if section.settings.show_author and article.author != blank %}
+                    · {{ 'sections.blog_posts.by_author' | t: author: article.author }}
+                  {%- endif -%}
+                </p>
+                <h2 class="card__heading h5">
+                  <a href="{{ article.url }}" class="card__title-link">{{ article.title | escape }}</a>
+                </h2>
+                {%- if section.settings.show_excerpt -%}
+                  <p class="card__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 26 }}</p>
+                {%- endif -%}
+              </div>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {% render 'pagination', paginate: paginate %}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "range", "id": "posts_per_page", "min": 3, "max": 24, "step": 3, "label": "Posts per page", "default": 12 },
+    { "type": "range", "id": "columns_desktop", "min": 1, "max": 4, "step": 1, "label": "Columns on desktop", "default": 3 },
+    { "type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false }
+  ]
+}
+{% endschema %}

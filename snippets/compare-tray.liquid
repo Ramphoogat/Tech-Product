@@ -1,0 +1,38 @@
+{%- comment -%}
+  Sticky comparison tray. Rendered on every page; stays hidden until the
+  shopper selects at least one product. Contents are built by compare.js from
+  localStorage so the selection survives navigation.
+{%- endcomment -%}
+
+{{ 'component-compare.css' | asset_url | stylesheet_tag }}
+
+{%- capture compare_href -%}
+  {%- render 'localized-url', url: settings.compare_page_url -%}
+{%- endcapture -%}
+
+<compare-tray
+  class="compare-tray"
+  hidden
+  data-limit="{{ settings.compare_limit }}"
+  data-compare-url="{{ compare_href }}"
+>
+  <div class="page-width compare-tray__inner">
+    <p class="compare-tray__heading">
+      {{ 'products.compare.tray_heading' | t }}
+      <span class="compare-tray__count" aria-hidden="true">0</span>
+    </p>
+
+    <ul class="compare-tray__items" role="list"></ul>
+
+    <div class="compare-tray__actions">
+      <button type="button" class="button button--tertiary compare-tray__clear">
+        {{- 'products.compare.clear_all' | t -}}
+      </button>
+      {%- if settings.compare_page_url != blank -%}
+        <a class="button button--primary compare-tray__go" href="{{ compare_href }}">
+          {{- 'products.compare.compare_button' | t -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</compare-tray>

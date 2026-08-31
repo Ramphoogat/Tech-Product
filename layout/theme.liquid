@@ -1,0 +1,101 @@
+<!doctype html>
+{%- liquid
+  # Shopify does not expose writing direction, so derive it from the active locale.
+  assign rtl_locales = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi' | split: ','
+  assign lang_root = request.locale.iso_code | split: '-' | first | downcase
+  assign text_direction = 'ltr'
+  if rtl_locales contains lang_root
+    assign text_direction = 'rtl'
+  endif
+-%}
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ text_direction }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>
+      {{- page_title -}}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+    {% render 'css-variables' %}
+
+    {{ content_for_header }}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+      window.routes = {
+        root_url: {{ routes.root_url | json }},
+        cart_url: {{ routes.cart_url | json }},
+        cart_add_url: {{ routes.cart_add_url | json }},
+        cart_change_url: {{ routes.cart_change_url | json }},
+        cart_update_url: {{ routes.cart_update_url | json }},
+        search_url: {{ routes.search_url | json }},
+        predictive_search_url: {{ routes.predictive_search_url | json }}
+      };
+      window.themeSettings = {
+        cartType: {{ settings.cart_type | json }},
+        compareEnabled: {{ settings.enable_compare | json }},
+        compareLimit: {{ settings.compare_limit | json }},
+        comparePageUrl: {{ settings.compare_page_url | default: '' | json }}
+      };
+      window.themeStrings = {
+        error: {{ 'general.accessibility.error' | t | json }},
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        adding: {{ 'products.product.adding' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        preOrder: {{ 'products.product.pre_order' | t | json }},
+        compareLimitReached: {{ 'products.compare.limit_reached' | t: count: settings.compare_limit | json }},
+        compareRemove: {{ 'products.compare.remove' | t: product: '@@P@@' | json }},
+        cartQuantityError: {{ 'sections.cart.quantity_error' | t: quantity: '@@Q@@' | json }}
+      };
+    </script>
+
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    {%- if settings.enable_compare -%}
+      <script src="{{ 'compare.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+  </head>
+
+  <body class="template-{{ request.page_type | handle }} cart-type-{{ settings.cart_type }}">
+    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+      {{- 'general.accessibility.skip_to_content' | t -}}
+    </a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {%- if settings.cart_type == 'drawer' -%}
+      {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {%- if settings.enable_compare -%}
+      {% render 'compare-tray' %}
+    {%- endif -%}
+
+    <div id="LiveRegion" class="visually-hidden" role="status" aria-live="polite"></div>
+  </body>
+</html>

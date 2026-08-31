@@ -1,0 +1,131 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Circuit",
+    "theme_version": "1.0.0",
+    "theme_author": "Circuit",
+    "theme_documentation_url": "https://shopify.dev/docs/storefronts/themes",
+    "theme_support_url": "https://shopify.dev/docs/storefronts/themes"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo" },
+      { "type": "range", "id": "logo_width", "min": 60, "max": 300, "step": 10, "unit": "px", "label": "Logo width", "default": 130 },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Square image, 32 x 32 px recommended." },
+      { "type": "text", "id": "brand_name", "label": "Brand name", "info": "Used in structured data and as a fallback when no logo is set." }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Base" },
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#ffffff" },
+      { "type": "color", "id": "color_background_subdued", "label": "Subdued background", "default": "#f4f5f7" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#12141a" },
+      { "type": "color", "id": "color_text_subdued", "label": "Subdued text", "default": "#5c6270" },
+      { "type": "color", "id": "color_border", "label": "Borders", "default": "#dfe2e8" },
+      { "type": "header", "content": "Accent" },
+      { "type": "color", "id": "color_accent", "label": "Accent", "default": "#1f4dff" },
+      { "type": "color", "id": "color_accent_text", "label": "Text on accent", "default": "#ffffff" },
+      { "type": "header", "content": "Inverse" },
+      { "type": "color", "id": "color_inverse_background", "label": "Inverse background", "default": "#12141a" },
+      { "type": "color", "id": "color_inverse_text", "label": "Inverse text", "default": "#ffffff" },
+      { "type": "header", "content": "Status" },
+      { "type": "color", "id": "color_sale", "label": "Sale", "default": "#c11a2b" },
+      { "type": "color", "id": "color_success", "label": "In stock", "default": "#116b3a" },
+      { "type": "color", "id": "color_warning", "label": "Low stock", "default": "#8a5200" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "type_header_font", "label": "Heading font", "default": "assistant_n6" },
+      { "type": "range", "id": "heading_scale", "min": 90, "max": 140, "step": 5, "unit": "%", "label": "Heading size scale", "default": 100 },
+      { "type": "select", "id": "heading_transform", "label": "Heading capitalization", "default": "none", "options": [ { "value": "none", "label": "None" }, { "value": "uppercase", "label": "Uppercase" } ] },
+      { "type": "font_picker", "id": "type_body_font", "label": "Body font", "default": "assistant_n4" },
+      { "type": "range", "id": "body_scale", "min": 90, "max": 130, "step": 5, "unit": "%", "label": "Body size scale", "default": 100 }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      { "type": "range", "id": "page_width", "min": 1000, "max": 1800, "step": 20, "unit": "px", "label": "Page width", "default": 1400 },
+      { "type": "range", "id": "spacing_sections", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Space between sections", "default": 48 },
+      { "type": "range", "id": "grid_gap", "min": 8, "max": 40, "step": 2, "unit": "px", "label": "Grid gap", "default": 20 },
+      { "type": "range", "id": "corner_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Corner radius", "default": 8 }
+    ]
+  },
+  {
+    "name": "Buttons and inputs",
+    "settings": [
+      { "type": "range", "id": "buttons_radius", "min": 0, "max": 40, "step": 2, "unit": "px", "label": "Button corner radius", "default": 6 },
+      { "type": "range", "id": "buttons_border_width", "min": 0, "max": 4, "step": 1, "unit": "px", "label": "Button border thickness", "default": 1 },
+      { "type": "range", "id": "inputs_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "label": "Input corner radius", "default": 6 }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      { "type": "select", "id": "card_image_ratio", "label": "Image ratio", "default": "square", "options": [ { "value": "adapt", "label": "Adapt to image" }, { "value": "square", "label": "Square" }, { "value": "portrait", "label": "Portrait" }, { "value": "landscape", "label": "Landscape" } ] },
+      { "type": "checkbox", "id": "card_show_vendor", "label": "Show vendor", "default": true },
+      { "type": "checkbox", "id": "card_show_second_image", "label": "Show second image on hover", "default": true },
+      { "type": "checkbox", "id": "card_show_swatches", "label": "Show colour swatches", "default": true, "info": "Uses the swatches set on your product option values." },
+      { "type": "checkbox", "id": "card_show_badges", "label": "Show sale and sold out badges", "default": true }
+    ]
+  },
+  {
+    "name": "Internationalization",
+    "settings": [
+      { "type": "paragraph", "content": "Countries, currencies and languages come from Shopify Markets. Add them under Settings > Markets and Settings > Languages." },
+      { "type": "checkbox", "id": "currency_code_enabled", "label": "Show currency codes with prices", "default": true, "info": "Renders 10.00 CAD instead of 10.00. Recommended when several markets share a currency symbol." },
+      { "type": "checkbox", "id": "show_country_selector", "label": "Show country/region selector", "default": true },
+      { "type": "checkbox", "id": "show_language_selector", "label": "Show language selector", "default": true },
+      { "type": "checkbox", "id": "show_currency_in_country_selector", "label": "Show currency next to each country", "default": true },
+      { "type": "checkbox", "id": "show_tax_and_shipping_note", "label": "Show tax and shipping note on product and cart", "default": true },
+      { "type": "checkbox", "id": "show_hreflang_tags", "label": "Output hreflang alternate tags", "default": true, "info": "Helps search engines serve the right language to the right visitor." }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      { "type": "select", "id": "cart_type", "label": "Cart type", "default": "drawer", "options": [ { "value": "drawer", "label": "Drawer" }, { "value": "page", "label": "Page" } ] },
+      { "type": "checkbox", "id": "cart_show_note", "label": "Enable order note", "default": false },
+      { "type": "checkbox", "id": "cart_show_vendor", "label": "Show vendor on cart lines", "default": false }
+    ]
+  },
+  {
+    "name": "Inventory",
+    "settings": [
+      { "type": "checkbox", "id": "show_inventory_status", "label": "Show stock status", "default": true },
+      { "type": "checkbox", "id": "show_inventory_quantity", "label": "Show remaining quantity when stock is low", "default": true },
+      { "type": "range", "id": "low_inventory_threshold", "min": 1, "max": 50, "step": 1, "label": "Low stock threshold", "default": 10 }
+    ]
+  },
+  {
+    "name": "Product comparison",
+    "settings": [
+      { "type": "checkbox", "id": "enable_compare", "label": "Enable product comparison", "default": true },
+      { "type": "range", "id": "compare_limit", "min": 2, "max": 4, "step": 1, "label": "Maximum products to compare", "default": 4 },
+      { "type": "url", "id": "compare_page_url", "label": "Comparison page", "info": "Create a page that uses the Compare template, then select it here." }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      { "type": "checkbox", "id": "predictive_search_enabled", "label": "Enable predictive search", "default": true },
+      { "type": "checkbox", "id": "predictive_search_show_vendor", "label": "Show product vendor", "default": false },
+      { "type": "checkbox", "id": "predictive_search_show_price", "label": "Show product price", "default": true }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "text", "id": "social_instagram_link", "label": "Instagram" },
+      { "type": "text", "id": "social_youtube_link", "label": "YouTube" },
+      { "type": "text", "id": "social_facebook_link", "label": "Facebook" },
+      { "type": "text", "id": "social_x_link", "label": "X" },
+      { "type": "text", "id": "social_linkedin_link", "label": "LinkedIn" }
+    ]
+  }
+]

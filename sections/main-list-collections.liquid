@@ -1,0 +1,49 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+<div class="list-collections section-padding">
+  <div class="page-width">
+    <h1 class="h2">{{ page_title }}</h1>
+
+    <ul class="grid" role="list" style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: 2;">
+      {%- for collection in collections -%}
+        <li class="grid__item">
+          <div class="card card--collection">
+            <a href="{{ collection.url }}" class="card__media" tabindex="-1" aria-hidden="true">
+              {%- if collection.featured_image -%}
+                {% render 'responsive-image',
+                  image: collection.featured_image,
+                  sizes: '(min-width: 990px) 25vw, 50vw',
+                  class: 'card__image'
+                %}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'card__image placeholder-svg' }}
+              {%- endif -%}
+            </a>
+            <div class="card__content">
+              <h2 class="card__heading h5">
+                <a href="{{ collection.url }}" class="card__title-link">{{ collection.title | escape }}</a>
+              </h2>
+              {%- if section.settings.show_product_count -%}
+                <p class="caption">
+                  {{- 'products.facets.product_count_simple' | t: count: collection.all_products_count -}}
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    { "type": "checkbox", "id": "show_product_count", "label": "Show product count", "default": true }
+  ]
+}
+{% endschema %}

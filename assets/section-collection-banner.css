@@ -1,0 +1,32 @@
+.collection-banner {
+  position: relative;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  padding-block: 4rem;
+}
+
+.collection-banner--with-image {
+  padding-block: 8rem;
+}
+
+.collection-banner__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.collection-banner__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+}
+
+.collection-banner__content {
+  position: relative;
+}
+
+.collection-banner__description {
+  max-width: 62ch;
+  margin-top: 1rem;
+}

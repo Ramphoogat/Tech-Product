@@ -1,0 +1,47 @@
+<article class="article section-padding">
+  <div class="page-width page-width--narrow">
+    <header class="article__header">
+      <h1 class="h2">{{ article.title | escape }}</h1>
+      <p class="caption">
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+          {{- article.published_at | date: format: 'date' -}}
+        </time>
+        {%- if section.settings.show_author and article.author != blank %}
+          · {{ 'sections.blog_posts.by_author' | t: author: article.author }}
+        {%- endif -%}
+      </p>
+    </header>
+
+    {%- if article.image and section.settings.show_image -%}
+      <div class="article__media">
+        {% render 'responsive-image',
+          image: article.image,
+          sizes: '(min-width: 990px) 900px, 100vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'article__image'
+        %}
+      </div>
+    {%- endif -%}
+
+    <div class="article__content rte">{{ article.content }}</div>
+
+    <p class="article__back">
+      <a href="{{ blog.url }}" class="link">
+        {{- 'sections.article.back_to_blog' | t: title: blog.title -}}
+      </a>
+    </p>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "label": "Show featured image", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false }
+  ]
+}
+{% endschema %}

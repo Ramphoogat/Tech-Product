@@ -1,0 +1,19 @@
+{%- comment -%}
+  Checkbox that adds a product to the comparison tray.
+  Only the handle is persisted; the title and thumbnail are refreshed from the
+  page on every visit so the tray follows the active language and market.
+  Accepts: product.
+{%- endcomment -%}
+
+<label class="compare-toggle">
+  <input
+    type="checkbox"
+    class="compare-toggle__input"
+    data-compare-handle="{{ product.handle }}"
+    data-compare-title="{{ product.title | escape }}"
+    data-compare-image="{{ product.featured_media.preview_image | image_url: width: 120 }}"
+    aria-label="{{ 'products.compare.aria_add' | t: product: product.title | escape }}"
+  >
+  <span class="compare-toggle__box" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+  <span class="compare-toggle__text">{{ 'products.compare.add' | t }}</span>
+</label>

@@ -1,0 +1,65 @@
+{%- comment -%}
+  Specification table driven by the `specs.rows` product metafield
+  (list of `specification` metaobjects with label / value / group fields).
+
+  Rows are grouped by their `group` field in first-seen order, so the merchant
+  controls both the grouping and the ordering entirely from the admin.
+  Accepts: product, heading, id.
+{%- endcomment -%}
+
+{%- liquid
+  assign rows = product.metafields.specs.rows.value
+  assign default_group = 'products.product.specifications.default_group' | t
+-%}
+
+{%- if rows != blank and rows.size > 0 -%}
+  {%- liquid
+    assign group_keys = ''
+    for row in rows
+      assign group_name = row.group.value | default: default_group
+      assign delimited = '~|~' | append: group_name | append: '~|~'
+      unless group_keys contains delimited
+        assign group_keys = group_keys | append: delimited
+      endunless
+    endfor
+    assign group_list = group_keys | split: '~|~' | uniq
+  -%}
+
+  <div class="spec-table-wrapper" {% if id %}id="{{ id }}"{% endif %}>
+    {%- if heading != blank -%}
+      <h2 class="spec-table__heading h4">{{ heading }}</h2>
+    {%- endif -%}
+
+    <table class="spec-table">
+      <caption class="visually-hidden">
+        {{- heading | default: 'products.product.specifications.title' | t -}}
+      </caption>
+      <colgroup>
+        <col class="spec-table__col-label">
+        <col class="spec-table__col-value">
+      </colgroup>
+
+      {%- for group_name in group_list -%}
+        {%- if group_name != blank -%}
+          <tbody class="spec-table__group">
+            {%- if group_list.size > 1 or group_name != default_group -%}
+              <tr class="spec-table__group-row">
+                <th colspan="2" scope="colgroup">{{ group_name }}</th>
+              </tr>
+            {%- endif -%}
+
+            {%- for row in rows -%}
+              {%- assign row_group = row.group.value | default: default_group -%}
+              {%- if row_group == group_name -%}
+                <tr>
+                  <th scope="row" class="spec-table__label">{{ row.label.value }}</th>
+                  <td class="spec-table__value">{{ row.value.value }}</td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        {%- endif -%}
+      {%- endfor -%}
+    </table>
+  </div>
+{%- endif -%}

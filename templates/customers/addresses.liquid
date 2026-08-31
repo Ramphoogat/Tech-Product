@@ -1,0 +1,177 @@
+<div class="customer section-padding">
+  <div class="page-width">
+    <div class="customer__header">
+      <h1 class="h3">{{ 'customer.addresses.title' | t }}</h1>
+      <a href="{{ routes.account_url }}" class="link">{{ 'customer.account.return' | t }}</a>
+    </div>
+
+    <section class="customer__address-new">
+      <h2 class="h5">{{ 'customer.addresses.add_new' | t }}</h2>
+
+      {%- form 'customer_address', customer.new_address -%}
+        {{ form.errors | default_errors }}
+
+        <div class="contact-form__grid">
+          <div class="field">
+            <label class="form__label" for="AddressFirstNameNew">{{ 'customer.addresses.first_name' | t }}</label>
+            <input class="input" type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label class="form__label" for="AddressLastNameNew">{{ 'customer.addresses.last_name' | t }}</label>
+            <input class="input" type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name">
+          </div>
+          <div class="field field--full">
+            <label class="form__label" for="AddressCompanyNew">{{ 'customer.addresses.company' | t }}</label>
+            <input class="input" type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocomplete="organization">
+          </div>
+          <div class="field field--full">
+            <label class="form__label" for="AddressAddress1New">{{ 'customer.addresses.address1' | t }}</label>
+            <input class="input" type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1">
+          </div>
+          <div class="field field--full">
+            <label class="form__label" for="AddressAddress2New">{{ 'customer.addresses.address2' | t }}</label>
+            <input class="input" type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2">
+          </div>
+          <div class="field">
+            <label class="form__label" for="AddressCityNew">{{ 'customer.addresses.city' | t }}</label>
+            <input class="input" type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label class="form__label" for="AddressZipNew">{{ 'customer.addresses.zip' | t }}</label>
+            <input class="input" type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code">
+          </div>
+
+          <address-fields class="field field--full">
+            <label class="form__label" for="AddressCountryNew">{{ 'customer.addresses.country' | t }}</label>
+            <select class="select" id="AddressCountryNew" name="address[country]" data-country-select data-default="{{ form.country }}" autocomplete="country">
+              {{ country_option_tags }}
+            </select>
+
+            <div data-province-wrapper hidden>
+              <label class="form__label" for="AddressProvinceNew">{{ 'customer.addresses.province' | t }}</label>
+              <select class="select" id="AddressProvinceNew" name="address[province]" data-province-select data-default="{{ form.province }}" autocomplete="address-level1"></select>
+            </div>
+          </address-fields>
+
+          <div class="field">
+            <label class="form__label" for="AddressPhoneNew">{{ 'customer.addresses.phone' | t }}</label>
+            <input class="input" type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}" autocomplete="tel">
+          </div>
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" name="address[default]" value="1">
+          <span class="checkbox__box" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+          <span class="checkbox__label">{{ 'customer.addresses.set_default' | t }}</span>
+        </label>
+
+        <button type="submit" class="button button--primary">{{ 'customer.addresses.add' | t }}</button>
+      {%- endform -%}
+    </section>
+
+    <section class="customer__address-list">
+      {%- paginate customer.addresses by 10 -%}
+        <ul role="list" class="customer__address-items">
+          {%- for address in customer.addresses -%}
+            <li class="customer__address-item">
+              {%- if address == customer.default_address -%}
+                <p class="caption">{{ 'customer.addresses.default' | t }}</p>
+              {%- endif -%}
+              {{ address | format_address }}
+
+              <div class="customer__address-actions">
+                <form method="post" action="{{ address.url }}">
+                  <input type="hidden" name="_method" value="delete">
+                  <button
+                    type="submit"
+                    class="link"
+                    data-confirm="{{ 'customer.addresses.delete_confirm' | t | escape }}"
+                  >
+                    {{- 'customer.addresses.delete' | t -}}
+                  </button>
+                </form>
+              </div>
+
+              <details id="Address-{{ address.id }}" class="customer__address-edit">
+                <summary class="link">{{ 'customer.addresses.edit_address' | t }}</summary>
+
+                {%- form 'customer_address', address -%}
+                  <div class="contact-form__grid">
+                    <div class="field">
+                      <label class="form__label" for="AddressFirstName-{{ address.id }}">
+                        {{- 'customer.addresses.first_name' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressFirstName-{{ address.id }}" name="address[first_name]" value="{{ address.first_name }}">
+                    </div>
+                    <div class="field">
+                      <label class="form__label" for="AddressLastName-{{ address.id }}">
+                        {{- 'customer.addresses.last_name' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressLastName-{{ address.id }}" name="address[last_name]" value="{{ address.last_name }}">
+                    </div>
+                    <div class="field field--full">
+                      <label class="form__label" for="AddressAddress1-{{ address.id }}">
+                        {{- 'customer.addresses.address1' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressAddress1-{{ address.id }}" name="address[address1]" value="{{ address.address1 }}">
+                    </div>
+                    <div class="field field--full">
+                      <label class="form__label" for="AddressAddress2-{{ address.id }}">
+                        {{- 'customer.addresses.address2' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressAddress2-{{ address.id }}" name="address[address2]" value="{{ address.address2 }}">
+                    </div>
+                    <div class="field">
+                      <label class="form__label" for="AddressCity-{{ address.id }}">
+                        {{- 'customer.addresses.city' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressCity-{{ address.id }}" name="address[city]" value="{{ address.city }}">
+                    </div>
+                    <div class="field">
+                      <label class="form__label" for="AddressZip-{{ address.id }}">
+                        {{- 'customer.addresses.zip' | t -}}
+                      </label>
+                      <input class="input" type="text" id="AddressZip-{{ address.id }}" name="address[zip]" value="{{ address.zip }}">
+                    </div>
+
+                    <address-fields class="field field--full">
+                      <label class="form__label" for="AddressCountry-{{ address.id }}">
+                        {{- 'customer.addresses.country' | t -}}
+                      </label>
+                      <select class="select" id="AddressCountry-{{ address.id }}" name="address[country]" data-country-select data-default="{{ address.country }}">
+                        {{ country_option_tags }}
+                      </select>
+                      <div data-province-wrapper hidden>
+                        <label class="form__label" for="AddressProvince-{{ address.id }}">
+                          {{- 'customer.addresses.province' | t -}}
+                        </label>
+                        <select class="select" id="AddressProvince-{{ address.id }}" name="address[province]" data-province-select data-default="{{ address.province }}"></select>
+                      </div>
+                    </address-fields>
+
+                    <div class="field">
+                      <label class="form__label" for="AddressPhone-{{ address.id }}">
+                        {{- 'customer.addresses.phone' | t -}}
+                      </label>
+                      <input class="input" type="tel" id="AddressPhone-{{ address.id }}" name="address[phone]" value="{{ address.phone }}">
+                    </div>
+                  </div>
+
+                  <label class="checkbox">
+                    <input type="checkbox" name="address[default]" value="1" {% if address == customer.default_address %}checked{% endif %}>
+                    <span class="checkbox__box" aria-hidden="true">{% render 'icon', icon: 'check' %}</span>
+                    <span class="checkbox__label">{{ 'customer.addresses.set_default' | t }}</span>
+                  </label>
+
+                  <button type="submit" class="button button--primary">{{ 'customer.addresses.update' | t }}</button>
+                {%- endform -%}
+              </details>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {% render 'pagination', paginate: paginate %}
+      {%- endpaginate -%}
+    </section>
+  </div>
+</div>

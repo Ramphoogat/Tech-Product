@@ -1,0 +1,26 @@
+{%- comment -%}
+  Renders a responsive <img> with a srcset capped at the source image width.
+  Accepts: image, sizes, widths, class, loading, fetchpriority, alt_override.
+{%- endcomment -%}
+
+{%- liquid
+  assign widths = widths | default: '180,275,360,533,720,940,1080,1296,1512,1728,2048'
+  assign sizes = sizes | default: '100vw'
+  assign loading = loading | default: 'lazy'
+  assign fetchpriority = fetchpriority | default: 'auto'
+  assign alt_text = alt_override | default: image.alt
+-%}
+
+{%- if image != blank -%}
+  {{
+    image
+    | image_url: width: 2048
+    | image_tag:
+      loading: loading,
+      fetchpriority: fetchpriority,
+      sizes: sizes,
+      widths: widths,
+      class: class,
+      alt: alt_text
+  }}
+{%- endif -%}

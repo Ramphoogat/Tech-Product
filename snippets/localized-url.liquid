@@ -1,0 +1,29 @@
+{%- comment -%}
+  Outputs a URL that respects the active locale root.
+
+  Menu links (link_list) are already localized by Shopify, but paths chosen in
+  the theme editor with a `url` setting are stored bare ("/pages/compare"), so
+  following one from /fr would drop the visitor back into the primary locale.
+  This prefixes routes.root_url when it is needed and leaves absolute URLs,
+  anchors and mailto: links alone.
+
+  Usage:
+    {%- capture href -%}{%- render 'localized-url', url: block.settings.link -%}{%- endcapture -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign target = url | default: ''
+  assign first_char = target | slice: 0
+  assign root = routes.root_url
+
+  if target == blank or root == '/' or first_char != '/'
+    echo target
+  else
+    assign prefix = target | slice: 0, root.size
+    if prefix == root
+      echo target
+    else
+      echo root | append: target
+    endif
+  endif
+-%}

@@ -1,0 +1,73 @@
+{%- comment -%}
+  Social meta tags plus hreflang alternates for every published language.
+  The alternate URLs are rebuilt from request.path so they always point at the
+  same resource under a different locale root (/, /fr, /de-at ...).
+{%- endcomment -%}
+
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title | default: shop.name | escape }}">
+<meta property="og:description" content="{{ page_description | default: shop.description | default: shop.name | escape }}">
+<meta property="og:locale" content="{{ request.locale.iso_code | replace: '-', '_' }}">
+
+{%- liquid
+  case request.page_type
+    when 'product'
+      assign og_type = 'product'
+      assign og_image = product.featured_media.preview_image
+    when 'article'
+      assign og_type = 'article'
+      assign og_image = article.image
+    when 'collection'
+      assign og_type = 'website'
+      assign og_image = collection.featured_image
+    else
+      assign og_type = 'website'
+      assign og_image = settings.logo
+  endcase
+-%}
+<meta property="og:type" content="{{ og_type }}">
+
+{%- if og_image -%}
+  <meta property="og:image" content="http:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="{{ 1200 | divided_by: og_image.aspect_ratio | round }}">
+  <meta property="og:image:alt" content="{{ og_image.alt | escape }}">
+{%- endif -%}
+
+{%- if request.page_type == 'product' -%}
+  <meta property="og:price:amount" content="{{ product.price | divided_by: 100.0 }}">
+  <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+{%- endif -%}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title | default: shop.name | escape }}">
+<meta name="twitter:description" content="{{ page_description | default: shop.description | default: shop.name | escape }}">
+
+{%- if settings.show_hreflang_tags and localization.available_languages.size > 1 -%}
+  {%- liquid
+    assign base_path = request.path
+    if request.locale.root_url != '/'
+      assign base_path = base_path | remove_first: request.locale.root_url
+    endif
+    if base_path == blank
+      assign base_path = '/'
+    endif
+  -%}
+  {%- for language in localization.available_languages -%}
+    {%- liquid
+      if language.root_url == '/'
+        assign alt_path = base_path
+      else
+        assign alt_path = language.root_url
+        unless base_path == '/'
+          assign alt_path = alt_path | append: base_path
+        endunless
+      endif
+    -%}
+    <link rel="alternate" hreflang="{{ language.iso_code }}" href="{{ shop.url }}{{ alt_path }}">
+    {%- if language.primary -%}
+      <link rel="alternate" hreflang="x-default" href="{{ shop.url }}{{ alt_path }}">
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}

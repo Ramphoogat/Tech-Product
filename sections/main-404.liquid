@@ -1,0 +1,18 @@
+<div class="not-found section-padding">
+  <div class="page-width page-width--narrow not-found__inner">
+    <h1 class="h1">{{ 'templates.404.title' | t }}</h1>
+    <p>{{ 'templates.404.subtext' | t }}</p>
+    <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+      {{- 'templates.404.link' | t -}}
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 page",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}

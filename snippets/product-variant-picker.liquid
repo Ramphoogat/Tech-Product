@@ -1,0 +1,113 @@
+{%- comment -%}
+  Variant selection.
+
+  Colour/finish options that carry a swatch on their option values render as
+  swatch buttons; everything else renders as a pill. Selecting a value asks the
+  Section Rendering API for this section at the new variant, so price, stock and
+  buy buttons come back rendered by the server in the active market's currency
+  rather than being formatted in JavaScript.
+
+  Accepts: product, section_id, product_form_id.
+{%- endcomment -%}
+
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    class="variant-selects"
+    data-section="{{ section_id }}"
+    data-url="{{ product.url }}"
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign has_swatch = false
+        for value in option.values
+          if value.swatch != blank
+            assign has_swatch = true
+            break
+          endif
+        endfor
+      -%}
+
+      <fieldset class="variant-option{% if has_swatch %} variant-option--swatch{% endif %}">
+        <legend class="variant-option__legend form__label">
+          <span>{{ option.name }}</span>
+          <span class="variant-option__selected" data-selected-value="{{ option.position }}">
+            {{- option.selected_value -}}
+          </span>
+        </legend>
+
+        <div class="variant-option__values">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign value_name = value.name | default: value
+              assign input_id = section_id | append: '-option-' | append: option.position | append: '-' | append: forloop.index
+            -%}
+            <input
+              type="radio"
+              class="variant-option__input visually-hidden"
+              id="{{ input_id }}"
+              name="{{ section_id }}-option-{{ option.position }}"
+              value="{{ value_name | escape }}"
+              data-option-position="{{ option.position }}"
+              {% if option.selected_value == value_name %}checked{% endif %}
+              {% unless value.available %}data-unavailable="true"{% endunless %}
+            >
+            <label
+              class="variant-option__label{% if has_swatch %} variant-option__label--swatch{% endif %}"
+              for="{{ input_id }}"
+              {% unless value.available %}title="{{ 'products.product.unavailable_with_option' | t: option: value_name | escape }}"{% endunless %}
+            >
+              {%- if has_swatch -%}
+                <span
+                  class="swatch"
+                  style="
+                    {%- if value.swatch.image -%}
+                      --swatch-background: url({{ value.swatch.image | image_url: width: 100 }});
+                    {%- else -%}
+                      --swatch-background: {{ value.swatch.color | default: '#cccccc' }};
+                    {%- endif -%}
+                  "
+                ></span>
+                <span class="visually-hidden">{{ value_name }}</span>
+              {%- else -%}
+                {{ value_name }}
+              {%- endif -%}
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json" data-variant-data>
+      [
+        {%- for variant in product.variants -%}
+          {
+            "id": {{ variant.id }},
+            "available": {{ variant.available | json }},
+            "options": {{ variant.options | json }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    </script>
+  </variant-selects>
+
+  <noscript>
+    <label class="form__label" for="{{ section_id }}-variant-fallback">{{ 'products.product.choose_options' | t }}</label>
+    <select
+      class="select"
+      id="{{ section_id }}-variant-fallback"
+      name="id"
+      form="{{ product_form_id }}"
+    >
+      {%- for variant in product.variants -%}
+        <option
+          value="{{ variant.id }}"
+          {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+          {% unless variant.available %}disabled{% endunless %}
+        >
+          {{ variant.title }}
+          {%- unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless -%}
+        </option>
+      {%- endfor -%}
+    </select>
+  </noscript>
+{%- endunless -%}

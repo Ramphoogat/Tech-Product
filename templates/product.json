@@ -1,0 +1,88 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "vendor", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "sku": { "type": "sku", "settings": {} },
+        "inventory": { "type": "inventory", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": {} },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": { "show_quantity": true, "show_dynamic_checkout": true }
+        },
+        "description": { "type": "description", "settings": {} },
+        "specifications": {
+          "type": "specifications",
+          "settings": { "heading": "Specifications" }
+        },
+        "shipping": {
+          "type": "market_info",
+          "settings": {
+            "icon": "truck",
+            "heading": "Shipping and delivery",
+            "content": "<p>Dispatched within 1 business day. Delivery estimates are shown at checkout.</p>",
+            "countries": "",
+            "metafield_key": "shipping",
+            "open_by_default": false
+          }
+        },
+        "warranty": {
+          "type": "market_info",
+          "settings": {
+            "icon": "shield",
+            "heading": "Warranty",
+            "content": "<p>Covered by a limited manufacturer warranty. Terms vary by region.</p>",
+            "countries": "",
+            "metafield_key": "warranty",
+            "open_by_default": false
+          }
+        },
+        "power": {
+          "type": "market_info",
+          "settings": {
+            "icon": "plug",
+            "heading": "Power and plug standard",
+            "content": "<p>Ships with the plug type and voltage range for your region.</p>",
+            "countries": "",
+            "metafield_key": "power",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "sku",
+        "inventory",
+        "variant_picker",
+        "buy_buttons",
+        "description",
+        "specifications",
+        "shipping",
+        "warranty",
+        "power"
+      ],
+      "settings": {
+        "media_size": "large",
+        "enable_sticky_info": true
+      }
+    },
+    "related": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "You might also like",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_view_all": false,
+        "enable_compare": false,
+        "color_scheme": "default"
+      }
+    }
+  },
+  "order": ["main", "related"]
+}

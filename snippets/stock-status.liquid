@@ -1,0 +1,49 @@
+{%- comment -%}
+  Availability state for a variant.
+  Accepts: variant, id.
+
+  "Available with no inventory on hand" means the variant is set to continue
+  selling when out of stock, which we surface as a pre-order rather than
+  claiming stock we do not have.
+{%- endcomment -%}
+
+{%- if settings.show_inventory_status -%}
+  {%- liquid
+    assign threshold = settings.low_inventory_threshold
+    assign state = 'out'
+
+    if variant.available
+      if variant.inventory_management == blank
+        assign state = 'in'
+      elsif variant.inventory_quantity > 0
+        if variant.inventory_quantity <= threshold
+          assign state = 'low'
+        else
+          assign state = 'in'
+        endif
+      else
+        assign state = 'pre'
+      endif
+    endif
+  -%}
+
+  <div class="stock-status stock-status--{{ state }}" {% if id %}id="{{ id }}"{% endif %}>
+    <span class="stock-status__dot" aria-hidden="true"></span>
+    <span class="stock-status__label">
+      {%- case state -%}
+        {%- when 'in' -%}
+          {{ 'products.product.inventory.in_stock' | t }}
+        {%- when 'low' -%}
+          {%- if settings.show_inventory_quantity -%}
+            {{ 'products.product.inventory.low_stock_with_count' | t: count: variant.inventory_quantity }}
+          {%- else -%}
+            {{ 'products.product.inventory.low_stock' | t }}
+          {%- endif -%}
+        {%- when 'pre' -%}
+          {{ 'products.product.inventory.pre_order' | t }}
+        {%- else -%}
+          {{ 'products.product.inventory.out_of_stock' | t }}
+      {%- endcase -%}
+    </span>
+  </div>
+{%- endif -%}

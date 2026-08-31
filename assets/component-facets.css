@@ -1,0 +1,240 @@
+.facets-layout {
+  display: grid;
+  gap: 2.4rem;
+  grid-template-columns: 1fr;
+}
+
+.facets-wrapper,
+.facets-container {
+  display: contents;
+}
+
+.facets-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facets-toolbar__count {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--color-text-subdued);
+}
+
+.facets-toolbar__sort {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.facets-toolbar__sort .form__label {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.facets-toolbar__badge {
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 1rem;
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  font-size: 1.2rem;
+  line-height: 2rem;
+}
+
+.facets-panel {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 50;
+  width: min(34rem, 90vw);
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: var(--color-background);
+  border-inline-end: 1px solid var(--color-border);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform var(--duration-default) ease, visibility var(--duration-default);
+}
+
+.facets-panel.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.facets-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+
+.facets-panel__title {
+  margin: 0;
+}
+
+.facets-panel__close {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0.6rem;
+  color: inherit;
+}
+
+.active-facets__list {
+  list-style: none;
+  margin: 0 0 1.6rem;
+  padding: 0;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.active-facets__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2rem;
+  font-size: 1.3rem;
+  text-decoration: none;
+}
+
+.active-facets__chip .icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.facet {
+  border-top: 1px solid var(--color-border);
+}
+
+.facet:last-of-type {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facet__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.4rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.5rem;
+}
+
+.facet__summary::-webkit-details-marker {
+  display: none;
+}
+
+.facet__selected {
+  font-size: 1.3rem;
+  color: var(--color-accent);
+}
+
+.facet__marker {
+  margin-inline-start: auto;
+}
+
+.facet__marker .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  transition: transform var(--duration-short) ease;
+}
+
+.facet[open] > .facet__summary .facet__marker .icon {
+  transform: rotate(180deg);
+}
+
+.facet__content {
+  padding-bottom: 1.4rem;
+}
+
+.facet__values {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+  max-height: none;
+}
+
+.facet__values--collapsed {
+  max-height: 22rem;
+  overflow: hidden;
+}
+
+.facet__values--collapsed.is-expanded {
+  max-height: none;
+  overflow: visible;
+}
+
+.facet__more {
+  margin-top: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.facet__price {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.facet__hint {
+  grid-column: 1 / -1;
+}
+
+.facets-form__submit {
+  margin-top: 1.6rem;
+}
+
+.collection__empty {
+  padding-block: 4rem;
+  text-align: center;
+}
+
+.collection__results {
+  min-height: 20rem;
+}
+
+.collection__results.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media screen and (min-width: 990px) {
+  .facets-layout:has(.facets-panel) {
+    grid-template-columns: 26rem minmax(0, 1fr);
+    column-gap: 3.2rem;
+  }
+
+  .facets-toolbar {
+    grid-column: 1 / -1;
+  }
+
+  .facets-toolbar__open {
+    display: none;
+  }
+
+  .facets-panel {
+    position: static;
+    width: auto;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    transform: none;
+    visibility: visible;
+    background: none;
+  }
+
+  .facets-panel__header {
+    display: none;
+  }
+}

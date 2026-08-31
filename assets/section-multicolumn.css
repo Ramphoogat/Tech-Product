@@ -1,0 +1,29 @@
+.multicolumn {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+.multicolumn__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.multicolumn__icon .icon {
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--color-accent);
+}
+
+.multicolumn__media img {
+  border-radius: var(--corner-radius);
+}
+
+.multicolumn__heading {
+  margin: 0;
+}
+
+.multicolumn__text {
+  color: var(--color-text-subdued);
+  font-size: 1.5rem;
+}

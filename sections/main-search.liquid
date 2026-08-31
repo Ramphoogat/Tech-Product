@@ -1,0 +1,118 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign show_compare = false
+  if settings.enable_compare and section.settings.enable_compare
+    assign show_compare = true
+  endif
+-%}
+
+<div class="search-results section-padding" id="Search-{{ section.id }}">
+  <div class="page-width">
+    <div class="search-results__header">
+      <h1 class="h2">
+        {%- if search.performed -%}
+          {{ 'general.search.results_for' | t: terms: search.terms }}
+        {%- else -%}
+          {{ 'general.search.title' | t }}
+        {%- endif -%}
+      </h1>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form search-form--page">
+        <input type="hidden" name="options[prefix]" value="last">
+        <label class="visually-hidden" for="SearchPage-{{ section.id }}">
+          {{- 'general.search.title' | t -}}
+        </label>
+        <div class="search-form__field">
+          {% render 'icon', icon: 'search' %}
+          <input
+            id="SearchPage-{{ section.id }}"
+            class="search-form__input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'general.search.placeholder' | t | escape }}"
+          >
+          <button type="submit" class="search-form__submit button button--primary">
+            {{- 'general.search.submit' | t -}}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {%- if search.performed -%}
+      {%- if search.results_count == 0 -%}
+        <p class="search-results__empty">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+      {%- else -%}
+        {%- paginate search.results by section.settings.results_per_page -%}
+          <div class="facets-layout">
+            <div class="facets-wrapper" id="FacetsContainer-{{ section.id }}">
+              {%- if search.filters.size > 0 and section.settings.enable_filtering -%}
+                {% render 'facets',
+                  results: search,
+                  section_id: section.id,
+                  enable_sorting: section.settings.enable_sorting,
+                  results_count: search.results_count
+                %}
+              {%- endif -%}
+            </div>
+
+            <div class="collection__results" id="ProductGridContainer-{{ section.id }}">
+              <ul
+                class="grid product-grid"
+                role="list"
+                style="--columns-desktop: {{ section.settings.columns_desktop }}; --columns-mobile: 2;"
+              >
+                {%- for item in search.results -%}
+                  <li class="grid__item">
+                    {%- case item.object_type -%}
+                      {%- when 'product' -%}
+                        {% render 'card-product',
+                          product: item,
+                          show_compare: show_compare,
+                          sizes: '(min-width: 990px) calc(var(--page-width) / 5), (min-width: 750px) 33vw, 50vw'
+                        %}
+                      {%- when 'article' -%}
+                        <article class="card card--content">
+                          <h2 class="card__heading h5">
+                            <a href="{{ item.url }}" class="card__title-link">{{ item.title | escape }}</a>
+                          </h2>
+                          <p class="card__excerpt">{{ item.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+                        </article>
+                      {%- when 'page' -%}
+                        <article class="card card--content">
+                          <h2 class="card__heading h5">
+                            <a href="{{ item.url }}" class="card__title-link">{{ item.title | escape }}</a>
+                          </h2>
+                          <p class="card__excerpt">{{ item.content | strip_html | truncatewords: 24 }}</p>
+                        </article>
+                    {%- endcase -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              {% render 'pagination', paginate: paginate, anchor: '#Search-' | append: section.id %}
+            </div>
+          </div>
+        {%- endpaginate -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "range", "id": "results_per_page", "min": 8, "max": 48, "step": 4, "label": "Results per page", "default": 24 },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
+    { "type": "checkbox", "id": "enable_compare", "label": "Show compare checkbox on cards", "default": true }
+  ]
+}
+{% endschema %}

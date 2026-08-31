@@ -1,0 +1,100 @@
+{%- comment -%}
+  Announcement bar. Each message can be limited to a list of countries so a
+  free-shipping threshold or a customs notice only shows in the markets where
+  it is actually true.
+{%- endcomment -%}
+
+{{ 'section-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign visible_blocks = ''
+  for block in section.blocks
+    assign codes = block.settings.countries | remove: ' ' | upcase | split: ','
+    if block.settings.countries == blank or codes contains localization.country.iso_code
+      assign visible_blocks = visible_blocks | append: block.id | append: ','
+    endif
+  endfor
+  assign visible_ids = visible_blocks | split: ','
+-%}
+
+{%- if visible_ids.size > 0 -%}
+  <div class="announcement-bar color-{{ section.settings.color_scheme }}">
+    <div class="page-width announcement-bar__inner">
+      <ul class="announcement-bar__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if visible_ids contains block.id -%}
+            <li class="announcement-bar__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}
+                {%- capture announcement_href -%}
+                  {%- render 'localized-url', url: block.settings.link -%}
+                {%- endcapture -%}
+                <a href="{{ announcement_href }}" class="announcement-bar__link">
+                  {{- block.settings.text -}}
+                </a>
+              {%- else -%}
+                <span>{{ block.settings.text }}</span>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.show_localization -%}
+        <div class="announcement-bar__localization">
+          {% render 'country-language-selector', id_prefix: 'announcement' %}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "section-announcement-bar",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "inverse",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "subdued", "label": "Subdued" },
+        { "value": "inverse", "label": "Inverse" },
+        { "value": "accent", "label": "Accent" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Show country and language selector",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free express shipping on orders over 200" },
+        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "text",
+          "id": "countries",
+          "label": "Show for countries",
+          "info": "Comma-separated ISO country codes, for example US, CA, GB. Leave blank to show in every market."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [{ "type": "announcement" }]
+    }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

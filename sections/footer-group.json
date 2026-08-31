@@ -1,0 +1,39 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "footer" }
+        },
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "heading": "About",
+            "content": "<p>Tell customers who you are and where you ship from.</p>"
+          }
+        },
+        "newsletter-1": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Stay in the loop",
+            "content": "<p>New releases, firmware notes and restock alerts.</p>"
+          }
+        }
+      },
+      "block_order": ["menu-1", "text-1", "newsletter-1"],
+      "settings": {
+        "color_scheme": "subdued",
+        "show_localization": true,
+        "show_market_note": true,
+        "show_social": true,
+        "show_payment_icons": true,
+        "show_policy_links": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

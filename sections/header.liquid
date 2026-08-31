@@ -1,0 +1,265 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+{{ 'component-predictive-search.css' | asset_url | stylesheet_tag }}
+
+{%- if settings.predictive_search_enabled -%}
+  <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<sticky-header
+  class="header-wrapper{% if section.settings.show_separator %} header-wrapper--bordered{% endif %}"
+  data-sticky="{{ section.settings.sticky_header }}"
+>
+  <header class="header page-width header--logo-{{ section.settings.logo_position }}">
+    <menu-drawer class="header__drawer">
+      <details class="menu-drawer__details">
+        <summary
+          class="header__icon header__icon--menu"
+          aria-label="{{ 'sections.header.menu' | t | escape }}"
+        >
+          <span class="header__icon-open">{% render 'icon', icon: 'menu' %}</span>
+          <span class="header__icon-close">{% render 'icon', icon: 'close' %}</span>
+        </summary>
+
+        <div class="menu-drawer" tabindex="-1">
+          <nav class="menu-drawer__nav" aria-label="{{ 'sections.header.main_navigation' | t | escape }}">
+            <ul class="menu-drawer__list" role="list">
+              {%- for link in section.settings.menu.links -%}
+                <li>
+                  {%- if link.links.size > 0 -%}
+                    <details class="menu-drawer__group">
+                      <summary class="menu-drawer__link menu-drawer__link--parent">
+                        <span>{{ link.title }}</span>
+                        {% render 'icon', icon: 'chevron-down' %}
+                      </summary>
+                      <ul class="menu-drawer__sublist" role="list">
+                        {%- for child in link.links -%}
+                          <li>
+                            <a
+                              href="{{ child.url }}"
+                              class="menu-drawer__link menu-drawer__link--child"
+                              {% if child.current %}aria-current="page"{% endif %}
+                            >
+                              {{- child.title -}}
+                            </a>
+                            {%- if child.links.size > 0 -%}
+                              <ul class="menu-drawer__sublist menu-drawer__sublist--deep" role="list">
+                                {%- for grandchild in child.links -%}
+                                  <li>
+                                    <a
+                                      href="{{ grandchild.url }}"
+                                      class="menu-drawer__link menu-drawer__link--grandchild"
+                                      {% if grandchild.current %}aria-current="page"{% endif %}
+                                    >
+                                      {{- grandchild.title -}}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </details>
+                  {%- else -%}
+                    <a
+                      href="{{ link.url }}"
+                      class="menu-drawer__link"
+                      {% if link.current %}aria-current="page"{% endif %}
+                    >
+                      {{- link.title -}}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+
+          <div class="menu-drawer__footer">
+            {%- if shop.customer_accounts_enabled -%}
+              <a href="{{ routes.account_url }}" class="menu-drawer__link">
+                {% render 'icon', icon: 'account' %}
+                {{ 'sections.header.account' | t }}
+              </a>
+            {%- endif -%}
+            {% render 'country-language-selector', id_prefix: 'drawer', show_labels: true %}
+          </div>
+        </div>
+      </details>
+    </menu-drawer>
+
+    {%- if section.settings.logo_position == 'center' and section.settings.menu != blank -%}
+      <nav class="header__nav header__nav--left" aria-label="{{ 'sections.header.main_navigation' | t | escape }}">
+        {% render 'header-menu', menu: section.settings.menu %}
+      </nav>
+    {%- endif -%}
+
+    <div class="header__heading">
+      {%- if request.page_type == 'index' -%}
+        <h1 class="header__heading-inner">
+      {%- else -%}
+        <div class="header__heading-inner">
+      {%- endif -%}
+      <a href="{{ routes.root_url }}" class="header__heading-link">
+        {%- if settings.logo != blank -%}
+          {% render 'responsive-image',
+            image: settings.logo,
+            sizes: section.settings.logo_width | append: 'px',
+            widths: '110,130,180,260,360,520',
+            loading: 'eager',
+            fetchpriority: 'high',
+            class: 'header__logo-image',
+            alt_override: shop.name
+          %}
+        {%- else -%}
+          <span class="header__logo-text">{{ settings.brand_name | default: shop.name }}</span>
+        {%- endif -%}
+      </a>
+      {%- if request.page_type == 'index' -%}
+        </h1>
+      {%- else -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.logo_position != 'center' and section.settings.menu != blank -%}
+      <nav class="header__nav" aria-label="{{ 'sections.header.main_navigation' | t | escape }}">
+        {% render 'header-menu', menu: section.settings.menu %}
+      </nav>
+    {%- endif -%}
+
+    <div class="header__actions">
+      {%- if section.settings.show_localization -%}
+        <div class="header__localization">
+          {% render 'country-language-selector', id_prefix: 'header' %}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_search -%}
+        <details-modal class="header__search">
+          <details>
+            <summary class="header__icon" aria-label="{{ 'sections.header.search' | t | escape }}">
+              <span class="header__icon-open">{% render 'icon', icon: 'search' %}</span>
+              <span class="header__icon-close">{% render 'icon', icon: 'close' %}</span>
+            </summary>
+
+            <div class="search-modal" tabindex="-1">
+              <div class="search-modal__inner page-width">
+                {%- if settings.predictive_search_enabled -%}
+                  <predictive-search class="search-form-wrapper" data-section="{{ section.id }}">
+                {%- else -%}
+                  <div class="search-form-wrapper">
+                {%- endif -%}
+                <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+                  <input type="hidden" name="options[prefix]" value="last">
+                  <label class="visually-hidden" for="Search-{{ section.id }}">
+                    {{- 'general.search.title' | t -}}
+                  </label>
+                  <div class="search-form__field">
+                    {% render 'icon', icon: 'search' %}
+                    <input
+                      id="Search-{{ section.id }}"
+                      class="search-form__input"
+                      type="search"
+                      name="q"
+                      value="{{ search.terms | escape }}"
+                      placeholder="{{ 'general.search.placeholder' | t | escape }}"
+                      autocomplete="off"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      spellcheck="false"
+                      {% if settings.predictive_search_enabled %}
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns="PredictiveResults-{{ section.id }}"
+                        aria-controls="PredictiveResults-{{ section.id }}"
+                        aria-haspopup="listbox"
+                        aria-autocomplete="list"
+                      {% endif %}
+                    >
+                    <button
+                      type="reset"
+                      class="search-form__reset"
+                      aria-label="{{ 'general.search.reset' | t | escape }}"
+                      hidden
+                    >
+                      {% render 'icon', icon: 'close' %}
+                    </button>
+                    <button class="search-form__submit button button--primary" type="submit">
+                      {{- 'general.search.submit' | t -}}
+                    </button>
+                  </div>
+
+                  {%- if settings.predictive_search_enabled -%}
+                    <div
+                      class="predictive-search"
+                      id="PredictiveResults-{{ section.id }}"
+                      tabindex="-1"
+                      data-predictive-search
+                      hidden
+                    ></div>
+                    <span class="visually-hidden" data-predictive-status role="status" aria-live="polite"></span>
+                  {%- endif -%}
+                </form>
+                {%- if settings.predictive_search_enabled -%}
+                  </predictive-search>
+                {%- else -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </details>
+        </details-modal>
+      {%- endif -%}
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a
+          href="{{ routes.account_url }}"
+          class="header__icon header__icon--account"
+          aria-label="{{ 'sections.header.account' | t | escape }}"
+        >
+          {% render 'icon', icon: 'account' %}
+        </a>
+      {%- endif -%}
+
+      <a
+        href="{{ routes.cart_url }}"
+        class="header__icon header__icon--cart"
+        id="CartIconBubble"
+        {% if settings.cart_type == 'drawer' %}data-cart-drawer-toggle{% endif %}
+      >
+        {% render 'cart-icon-bubble' %}
+      </a>
+    </div>
+  </header>
+</sticky-header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "select",
+      "id": "logo_position",
+      "label": "Logo position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ]
+    },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "sticky_header", "label": "Sticky header", "default": true },
+    { "type": "checkbox", "id": "show_separator", "label": "Show bottom border", "default": true },
+    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Show country and language selector",
+      "default": true,
+      "info": "Requires more than one market or language to be published."
+    }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

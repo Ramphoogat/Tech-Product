@@ -1,0 +1,252 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+  assign variant = product.selected_or_first_available_variant
+-%}
+
+<section
+  class="product section-padding"
+  data-section="{{ section.id }}"
+  {% if section.settings.enable_sticky_info %}data-sticky-info="true"{% endif %}
+>
+  <div class="page-width product__layout product__layout--media-{{ section.settings.media_size }}">
+    <div class="product__media-column">
+      {% render 'product-media-gallery', product: product, section_id: section.id %}
+    </div>
+
+    <div class="product__info-column">
+      <div
+        class="product__info"
+        id="ProductInfo-{{ section.id }}"
+        data-featured-media-id="{{ variant.featured_media.id }}"
+      >
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'vendor' -%}
+              {%- if product.vendor != blank -%}
+                <p class="product__vendor caption" {{ block.shopify_attributes }}>
+                  {{- product.vendor -}}
+                </p>
+              {%- endif -%}
+
+            {%- when 'title' -%}
+              <h1 class="product__title h2" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+
+            {%- when 'price' -%}
+              <div class="product__price" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
+                {% render 'price', product: product, use_variant: true, price_class: 'price--large' %}
+                {% render 'tax-shipping-note' %}
+              </div>
+
+            {%- when 'sku' -%}
+              <p class="product__sku caption" id="Sku-{{ section.id }}" {{ block.shopify_attributes }}>
+                {%- if variant.sku != blank -%}
+                  {{ 'products.product.sku' | t }}: <span>{{ variant.sku }}</span>
+                {%- endif -%}
+              </p>
+
+            {%- when 'inventory' -%}
+              <div class="product__inventory" {{ block.shopify_attributes }}>
+                {% render 'stock-status', variant: variant, id: 'Inventory-' | append: section.id %}
+              </div>
+
+            {%- when 'variant_picker' -%}
+              <div {{ block.shopify_attributes }}>
+                {% render 'product-variant-picker',
+                  product: product,
+                  section_id: section.id,
+                  product_form_id: product_form_id
+                %}
+              </div>
+
+            {%- when 'buy_buttons' -%}
+              <div id="BuyButtons-{{ section.id }}" {{ block.shopify_attributes }}>
+                {% render 'buy-buttons',
+                  product: product,
+                  section_id: section.id,
+                  product_form_id: product_form_id,
+                  show_dynamic_checkout: block.settings.show_dynamic_checkout,
+                  show_quantity: block.settings.show_quantity
+                %}
+              </div>
+
+            {%- when 'description' -%}
+              {%- if product.description != blank -%}
+                <div class="product__description rte" {{ block.shopify_attributes }}>
+                  {{ product.description }}
+                </div>
+              {%- endif -%}
+
+            {%- when 'specifications' -%}
+              <div {{ block.shopify_attributes }}>
+                {% render 'product-specifications',
+                  product: product,
+                  heading: block.settings.heading,
+                  id: 'Specs-' | append: section.id
+                %}
+              </div>
+
+            {%- when 'market_info' -%}
+              {% render 'product-market-info', block: block, product: product %}
+
+            {%- when 'collapsible_row' -%}
+              <details class="accordion" {% if block.settings.open_by_default %}open{% endif %} {{ block.shopify_attributes }}>
+                <summary class="accordion__summary">
+                  <span class="accordion__title">{{ block.settings.heading }}</span>
+                  <span class="accordion__marker" aria-hidden="true">
+                    {% render 'icon', icon: 'chevron-down' %}
+                  </span>
+                </summary>
+                <div class="accordion__content rte">
+                  {{ block.settings.content }}
+                  {{ block.settings.page.content }}
+                </div>
+              </details>
+
+            {%- when '@app' -%}
+              {% render block %}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {% if product.featured_media -%}
+      "image": {{ product.featured_media | image_url: width: 1200 | prepend: 'https:' | json }},
+    {%- endif %}
+    "description": {{ product.description | strip_html | json }},
+    {% if variant.sku != blank -%}
+      "sku": {{ variant.sku | json }},
+    {%- endif %}
+    "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
+    "offers": [
+      {%- for v in product.variants -%}
+        {
+          "@type": "Offer",
+          "sku": {{ v.sku | json }},
+          "availability": "https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price": {{ v.price | divided_by: 100.0 | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "url": {{ shop.url | append: v.url | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "Media width",
+      "default": "large",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "label": "Keep product details on screen while scrolling",
+      "default": true
+    }
+  ],
+  "blocks": [
+    { "type": "vendor", "name": "Vendor", "limit": 1 },
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "sku", "name": "SKU", "limit": 1 },
+    { "type": "inventory", "name": "Stock status", "limit": 1 },
+    { "type": "variant_picker", "name": "Variant picker", "limit": 1 },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": true },
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout buttons", "default": true, "info": "Shows the payment methods available in the shopper's market, such as Shop Pay, PayPal or Klarna." }
+      ]
+    },
+    { "type": "description", "name": "Description", "limit": 1 },
+    {
+      "type": "specifications",
+      "name": "Specifications",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Specifications" },
+        { "type": "paragraph", "content": "Rows come from the product metafield specs.rows (list of Specification metaobjects). Nothing renders if the product has no rows." }
+      ]
+    },
+    {
+      "type": "market_info",
+      "name": "Market information",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "truck",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Delivery" },
+            { "value": "shield", "label": "Warranty" },
+            { "value": "plug", "label": "Power" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "support", "label": "Support" }
+          ]
+        },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping and delivery" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Dispatched within 1 business day. Delivery estimates are shown at checkout.</p>" },
+        {
+          "type": "text",
+          "id": "countries",
+          "label": "Show for countries",
+          "info": "Comma-separated ISO country codes, for example DE, FR, IT. Leave blank to show in every market."
+        },
+        {
+          "type": "select",
+          "id": "metafield_key",
+          "label": "Per-product override",
+          "default": "none",
+          "info": "If the product has a value in this market_info metafield, it replaces the content above.",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "shipping", "label": "market_info.shipping" },
+            { "value": "warranty", "label": "market_info.warranty" },
+            { "value": "power", "label": "market_info.power" },
+            { "value": "returns", "label": "market_info.returns" }
+          ]
+        },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
+      ]
+    },
+    {
+      "type": "collapsible_row",
+      "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "In the box" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "page", "id": "page", "label": "Content from page" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
+      ]
+    },
+    { "type": "@app" }
+  ]
+}
+{% endschema %}
