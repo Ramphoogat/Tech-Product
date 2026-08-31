@@ -1,0 +1,40 @@
+{%- comment -%}
+  Universal section-frame inline style: background color, top/bottom padding,
+  top/bottom margin, container width, minimum height, and corner radius.
+  Every section that includes this expects the matching "Section style"
+  settings block in its {% schema %}.
+
+  Every control is optional and only emits CSS when the merchant actually sets
+  it (blank color, 0 px range, or the default "page" width are all treated as
+  "leave this alone"), so adding this snippet to a section never changes its
+  existing look until someone opens the setting in the theme editor.
+
+  Usage on the section's single root element:
+    <div class="my-section section-frame" style="{% render 'section-style' %}">
+
+  Accepts: section (defaults to the outer `section` object already in scope).
+{%- endcomment -%}
+
+{%- liquid
+  assign target = section
+  assign bg = target.settings.section_background
+  assign pt = target.settings.section_padding_top
+  assign pb = target.settings.section_padding_bottom
+  assign mt = target.settings.section_margin_top
+  assign mb = target.settings.section_margin_bottom
+  assign radius = target.settings.section_corner_radius
+  assign min_h = target.settings.section_min_height
+  assign width = target.settings.section_width
+-%}
+{%- if width == 'wide' -%}
+  --section-max-width: 1800px;
+{%- elsif width == 'full' -%}
+  --section-max-width: none;
+{%- endif -%}
+{%- if bg != blank -%}background-color: {{ bg }};{%- endif -%}
+{%- if pt > 0 -%}padding-top: {{ pt }}px;{%- endif -%}
+{%- if pb > 0 -%}padding-bottom: {{ pb }}px;{%- endif -%}
+{%- if mt > 0 -%}margin-top: {{ mt }}px;{%- endif -%}
+{%- if mb > 0 -%}margin-bottom: {{ mb }}px;{%- endif -%}
+{%- if radius > 0 -%}border-radius: {{ radius }}px;{%- endif -%}
+{%- if min_h > 0 -%}min-height: {{ min_h }}px;{%- endif -%}

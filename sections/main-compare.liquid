@@ -1,6 +1,6 @@
 {{ 'component-compare.css' | asset_url | stylesheet_tag }}
 
-<div class="compare-page section-padding">
+<div class="compare-page section-padding section-frame" style="{% render 'section-style' %}">
   <div class="page-width">
     <h1 class="h2">{{ section.settings.heading | default: page.title }}</h1>
 
@@ -37,9 +37,113 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Compare products" },
-    { "type": "richtext", "id": "subheading", "label": "Subheading" },
-    { "type": "url", "id": "browse_link", "label": "Keep shopping link" }
+    {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Background color",
+      "info": "Leave blank to use the color scheme background."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "default": "page",
+      "options": [
+        {
+          "value": "page",
+          "label": "Contained"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum height",
+      "default": 0,
+      "info": "0 uses the content's natural height."
+    },
+    {
+      "type": "range",
+      "id": "section_corner_radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Compare products"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "url",
+      "id": "browse_link",
+      "label": "Keep shopping link"
+    }
   ]
 }
 {% endschema %}

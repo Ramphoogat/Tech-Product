@@ -197,9 +197,20 @@ a {
 
 .page-width {
   width: 100%;
-  max-width: var(--page-width);
+  max-width: var(--section-max-width, var(--page-width));
   margin-inline: auto;
   padding-inline: var(--page-gutter);
+}
+
+/* --------------------------------------------------------------------------
+   Section style controls (background, padding, margin, width, min-height,
+   corner radius) — set as inline custom properties by snippets/section-style
+   .liquid and read here. --section-max-width cascades down to any nested
+   .page-width, which is how the width setting reaches a section's content.
+   -------------------------------------------------------------------------- */
+
+.section-frame {
+  position: relative;
 }
 
 .page-width--narrow {

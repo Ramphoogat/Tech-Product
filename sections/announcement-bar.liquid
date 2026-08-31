@@ -18,7 +18,7 @@
 -%}
 
 {%- if visible_ids.size > 0 -%}
-  <div class="announcement-bar color-{{ section.settings.color_scheme }}">
+  <div class="announcement-bar color-{{ section.settings.color_scheme }} section-frame" style="{% render 'section-style' %}">
     <div class="page-width announcement-bar__inner">
       <ul class="announcement-bar__list" role="list">
         {%- for block in section.blocks -%}
@@ -55,15 +55,118 @@
   "max_blocks": 6,
   "settings": [
     {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Background color",
+      "info": "Leave blank to use the color scheme background."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "default": "page",
+      "options": [
+        {
+          "value": "page",
+          "label": "Contained"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum height",
+      "default": 0,
+      "info": "0 uses the content's natural height."
+    },
+    {
+      "type": "range",
+      "id": "section_corner_radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
       "type": "select",
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "inverse",
       "options": [
-        { "value": "default", "label": "Default" },
-        { "value": "subdued", "label": "Subdued" },
-        { "value": "inverse", "label": "Inverse" },
-        { "value": "accent", "label": "Accent" }
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "subdued",
+          "label": "Subdued"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        },
+        {
+          "value": "accent",
+          "label": "Accent"
+        }
       ]
     },
     {
@@ -78,8 +181,17 @@
       "type": "announcement",
       "name": "Announcement",
       "settings": [
-        { "type": "text", "id": "text", "label": "Text", "default": "Free express shipping on orders over 200" },
-        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free express shipping on orders over 200"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
         {
           "type": "text",
           "id": "countries",
@@ -92,9 +204,17 @@
   "presets": [
     {
       "name": "Announcement bar",
-      "blocks": [{ "type": "announcement" }]
+      "blocks": [
+        {
+          "type": "announcement"
+        }
+      ]
     }
   ],
-  "enabled_on": { "groups": ["header"] }
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  }
 }
 {% endschema %}

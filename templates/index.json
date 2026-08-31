@@ -27,12 +27,14 @@
     "categories": {
       "type": "collection-list",
       "blocks": {
-        "collection-1": { "type": "featured_collection", "settings": {} },
-        "collection-2": { "type": "featured_collection", "settings": {} },
-        "collection-3": { "type": "featured_collection", "settings": {} },
-        "collection-4": { "type": "featured_collection", "settings": {} }
+        "collection-1": { "type": "featured_collection", "settings": { "collection": "audio-1" } },
+        "collection-2": { "type": "featured_collection", "settings": { "collection": "smart-watches-1" } },
+        "collection-3": { "type": "featured_collection", "settings": { "collection": "headphones-headsets-1" } },
+        "collection-4": { "type": "featured_collection", "settings": { "collection": "accessories-1" } },
+        "collection-5": { "type": "featured_collection", "settings": { "collection": "earplugs-1" } },
+        "collection-6": { "type": "featured_collection", "settings": { "collection": "gift-stores-1" } }
       },
-      "block_order": ["collection-1", "collection-2", "collection-3", "collection-4"],
+      "block_order": ["collection-1", "collection-2", "collection-3", "collection-4", "collection-5", "collection-6"],
       "settings": {
         "heading": "Shop by category",
         "columns_desktop": 4,
@@ -44,6 +46,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "New this season",
+        "collection": "new-this-season",
         "products_to_show": 8,
         "columns_desktop": 4,
         "columns_mobile": "2",

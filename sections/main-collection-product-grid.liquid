@@ -10,7 +10,7 @@
 -%}
 
 {%- paginate collection.products by section.settings.products_per_page -%}
-  <div class="collection section-padding" id="Collection-{{ section.id }}">
+  <div class="collection section-padding section-frame" id="Collection-{{ section.id }}" style="{% render 'section-style' %}">
     <div class="page-width">
       <div class="facets-layout">
         <div class="facets-wrapper" id="FacetsContainer-{{ section.id }}">
@@ -70,16 +70,129 @@
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "label": "Products per page", "default": 24 },
-    { "type": "range", "id": "columns_desktop", "min": 2, "max": 5, "step": 1, "label": "Columns on desktop", "default": 4 },
+    {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Background color",
+      "info": "Leave blank to use the color scheme background."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "default": "page",
+      "options": [
+        {
+          "value": "page",
+          "label": "Contained"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum height",
+      "default": 0,
+      "info": "0 uses the content's natural height."
+    },
+    {
+      "type": "range",
+      "id": "section_corner_radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
     {
       "type": "select",
       "id": "columns_mobile",
       "label": "Columns on mobile",
       "default": "2",
       "options": [
-        { "value": "1", "label": "1" },
-        { "value": "2", "label": "2" }
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
       ]
     },
     {
@@ -89,7 +202,12 @@
       "default": true,
       "info": "Filters are configured in the Search & Discovery app."
     },
-    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "enable_compare",

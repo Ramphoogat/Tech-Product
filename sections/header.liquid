@@ -6,8 +6,9 @@
 {%- endif -%}
 
 <sticky-header
-  class="header-wrapper{% if section.settings.show_separator %} header-wrapper--bordered{% endif %}"
+  class="header-wrapper section-frame{% if section.settings.show_separator %} header-wrapper--bordered{% endif %}"
   data-sticky="{{ section.settings.sticky_header }}"
+  style="{% render 'section-style' %}"
 >
   <header class="header page-width header--logo-{{ section.settings.logo_position }}">
     <menu-drawer class="header__drawer">
@@ -239,19 +240,136 @@
   "class": "section-header",
   "settings": [
     {
+      "type": "header",
+      "content": "Section style"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Background color",
+      "info": "Leave blank to use the color scheme background."
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "default": "page",
+      "options": [
+        {
+          "value": "page",
+          "label": "Contained"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "section_min_height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "label": "Minimum height",
+      "default": 0,
+      "info": "0 uses the content's natural height."
+    },
+    {
+      "type": "range",
+      "id": "section_corner_radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
       "type": "select",
       "id": "logo_position",
       "label": "Logo position",
       "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
       ]
     },
-    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
-    { "type": "checkbox", "id": "sticky_header", "label": "Sticky header", "default": true },
-    { "type": "checkbox", "id": "show_separator", "label": "Show bottom border", "default": true },
-    { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_separator",
+      "label": "Show bottom border",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "show_localization",
@@ -260,6 +378,10 @@
       "info": "Requires more than one market or language to be published."
     }
   ],
-  "enabled_on": { "groups": ["header"] }
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  }
 }
 {% endschema %}
