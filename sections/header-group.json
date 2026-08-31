@@ -53,9 +53,9 @@
         "logo_position": "left",
         "menu": "main-menu",
         "sticky_header": true,
-        "show_separator": true,
+        "show_separator": false,
         "show_search": true,
-        "show_localization": true
+        "show_localization": false
       }
     }
   },
