@@ -17,10 +17,7 @@
   else
     assign encoded_terms = results.terms | url_encode
     assign form_action = routes.search_url
-    assign clear_url = routes.search_url
-      | append: '?q='
-      | append: encoded_terms
-      | append: '&type=product&options%5Bprefix%5D=last'
+    assign clear_url = routes.search_url | append: '?q=' | append: encoded_terms | append: '&type=product&options%5Bprefix%5D=last'
   endif
 
   assign total_active = 0
