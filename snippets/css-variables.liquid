@@ -4,10 +4,16 @@
   restyle the whole theme from Theme settings without touching CSS.
 {%- endcomment -%}
 
-{{ settings.type_body_font | font_face: font_display: 'swap' }}
-{{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-{{ settings.type_body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-{{ settings.type_header_font | font_face: font_display: 'swap' }}
+{%- comment -%}
+  font_face outputs a raw @font-face rule, not markup — it must stay inside a
+  <style> tag or the CSS text prints as visible page content.
+{%- endcomment -%}
+<style>
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.type_header_font | font_face: font_display: 'swap' }}
+</style>
 
 <style>
   :root {

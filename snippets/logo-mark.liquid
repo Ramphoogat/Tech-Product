@@ -1,0 +1,31 @@
+{%- comment -%}
+  Inline circuit-board wordmark, used as the header/password-page logo when no
+  image is uploaded to Theme settings > Brand > Logo. Uses currentColor so it
+  follows the surrounding color scheme (default, inverse, accent) automatically.
+{%- endcomment -%}
+
+<svg
+  class="logo-mark"
+  viewBox="0 0 220 48"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="{{ settings.brand_name | default: shop.name | escape }}"
+>
+  <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="8" width="32" height="32" rx="6"/>
+    <circle cx="12" cy="18" r="2.6" fill="currentColor" stroke="none"/>
+    <circle cx="26" cy="18" r="2.6" fill="currentColor" stroke="none"/>
+    <circle cx="18" cy="30" r="2.6" fill="currentColor" stroke="none"/>
+    <path d="M12 18h6v-4M26 18h-6v6M18 30v-6"/>
+  </g>
+  <text
+    x="44"
+    y="32"
+    font-family="inherit"
+    font-size="26"
+    font-weight="700"
+    letter-spacing="0.2"
+    fill="currentColor"
+    stroke="none"
+  >{{ settings.brand_name | default: shop.name }}</text>
+</svg>

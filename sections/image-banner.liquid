@@ -12,6 +12,10 @@
       %}
     </div>
     <div class="image-banner__overlay" style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+  {%- else -%}
+    <div class="image-banner__media image-banner__media--placeholder">
+      {% render 'placeholder-hero' %}
+    </div>
   {%- endif -%}
 
   <div class="page-width image-banner__content image-banner__content--{{ section.settings.content_alignment }}">

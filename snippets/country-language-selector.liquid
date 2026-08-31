@@ -16,12 +16,15 @@
   if settings.show_language_selector and localization.available_languages.size > 1
     assign show_language = true
   endif
+
+  assign country_form_id = id_prefix | append: '-country-form'
+  assign language_form_id = id_prefix | append: '-language-form'
 -%}
 
 {%- if show_country or show_language -%}
   <div class="localization" role="group" aria-label="{{ 'localization.selector_label' | t | escape }}">
     {%- if show_country -%}
-      {%- form 'localization', id: id_prefix | append: '-country-form', class: 'localization-form' -%}
+      {%- form 'localization', id: country_form_id, class: 'localization-form' -%}
         <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
 
         <localization-form class="localization-form__field">
@@ -79,7 +82,7 @@
     {%- endif -%}
 
     {%- if show_language -%}
-      {%- form 'localization', id: id_prefix | append: '-language-form', class: 'localization-form' -%}
+      {%- form 'localization', id: language_form_id, class: 'localization-form' -%}
         <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
 
         <localization-form class="localization-form__field">

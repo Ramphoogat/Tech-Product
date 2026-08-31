@@ -63,6 +63,17 @@ video {
   flex: 0 0 auto;
 }
 
+.logo-mark {
+  display: block;
+  height: 2.8rem;
+  width: auto;
+  color: var(--color-text);
+}
+
+.logo-mark text {
+  font-family: var(--font-heading-family);
+}
+
 /* --------------------------------------------------------------------------
    Typography
    -------------------------------------------------------------------------- */

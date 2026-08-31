@@ -111,7 +111,7 @@
             alt_override: shop.name
           %}
         {%- else -%}
-          <span class="header__logo-text">{{ settings.brand_name | default: shop.name }}</span>
+          {% render 'logo-mark' %}
         {%- endif -%}
       </a>
       {%- if request.page_type == 'index' -%}
