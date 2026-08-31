@@ -11,7 +11,7 @@
   "current": {
     "brand_name": "Shoplux",
     "currency_code_enabled": true,
-    "show_country_selector": true,
+    "show_country_selector": false,
     "show_language_selector": true,
     "show_currency_in_country_selector": true,
     "show_tax_and_shipping_note": true,
