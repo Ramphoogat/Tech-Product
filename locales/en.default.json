@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "accessibility": {
@@ -180,6 +189,9 @@
       "payment_methods": "Payment methods",
       "follow_us": "Follow us"
     },
+    "announcement_bar": {
+      "dismiss": "Dismiss announcement"
+    },
     "cart": {
       "title": "Your cart",
       "drawer_title": "Your cart",
@@ -203,6 +215,10 @@
       "login": {
         "title": "Have an account?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link\">Log in</a> to check out faster."
+      },
+      "free_shipping": {
+        "remaining": "Add {{ amount }} more for free shipping",
+        "qualified": "Your order qualifies for free shipping"
       }
     },
     "collection_template": {
