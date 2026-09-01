@@ -27,7 +27,7 @@
         "announcement-1"
       ],
       "settings": {
-        "section_background": "",
+        "section_background": "#000000",
         "section_padding_top": 0,
         "section_padding_bottom": 0,
         "section_margin_top": 0,
@@ -42,7 +42,7 @@
     "header": {
       "type": "header",
       "settings": {
-        "section_background": "#000000",
+        "section_background": "#FFFFFF",
         "section_padding_top": 0,
         "section_padding_bottom": 0,
         "section_margin_top": 0,
