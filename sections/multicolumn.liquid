@@ -47,10 +47,10 @@
               {%- endif -%}
 
               {%- if block.settings.heading != blank -%}
-                <h3 class="multicolumn__heading h6">{{ block.settings.heading }}</h3>
+                <h3 class="multicolumn__heading h6" style="{% render 'text-style', block: block %}">{{ block.settings.heading }}</h3>
               {%- endif -%}
 
-              <div class="multicolumn__text rte">{{ block.settings.text }}</div>
+              <div class="multicolumn__text rte" style="{% render 'text-style', block: block %}">{{ block.settings.text }}</div>
             </li>
           {%- endif -%}
         {%- endfor -%}
@@ -272,6 +272,40 @@
           "id": "countries",
           "label": "Show for countries",
           "info": "Comma-separated ISO country codes, for example US, CA. Leave blank to show in every market."
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Extra large"
+            }
+          ]
         }
       ]
     }

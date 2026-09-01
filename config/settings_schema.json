@@ -91,7 +91,15 @@
     "settings": [
       { "type": "select", "id": "cart_type", "label": "Cart type", "default": "drawer", "options": [ { "value": "drawer", "label": "Drawer" }, { "value": "page", "label": "Page" } ] },
       { "type": "checkbox", "id": "cart_show_note", "label": "Enable order note", "default": false },
-      { "type": "checkbox", "id": "cart_show_vendor", "label": "Show vendor on cart lines", "default": false }
+      { "type": "checkbox", "id": "cart_show_vendor", "label": "Show vendor on cart lines", "default": false },
+      { "type": "header", "content": "Free shipping progress bar" },
+      { "type": "checkbox", "id": "enable_free_shipping_bar", "label": "Show free shipping progress bar", "default": false },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "Entered in your store's default currency. Shopify converts the cart total for display, but this number itself is not converted per market."
+      }
     ]
   },
   {

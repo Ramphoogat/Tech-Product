@@ -1,10 +1,15 @@
 {%- comment -%}
-  Announcement bar. Each message can be limited to a list of countries so a
-  free-shipping threshold or a customs notice only shows in the markets where
-  it is actually true.
+  Announcement bar.
+
+  Each message can be limited to a list of countries so a free-shipping
+  threshold or a customs notice only shows in the markets where it is
+  actually true. With more than one message, the bar can either show them
+  all at once (wrapped) or rotate through them one at a time. Visitors can
+  optionally dismiss the whole bar for the rest of their session.
 {%- endcomment -%}
 
 {{ 'section-announcement-bar.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'announcement-bar.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign visible_blocks = ''
@@ -15,15 +20,35 @@
     endif
   endfor
   assign visible_ids = visible_blocks | split: ','
+  assign visible_count = visible_ids.size
+
+  assign is_rotating = false
+  if section.settings.layout == 'rotate' and visible_count > 1
+    assign is_rotating = true
+  endif
 -%}
 
-{%- if visible_ids.size > 0 -%}
-  <div class="announcement-bar color-{{ section.settings.color_scheme }} section-frame" style="{% render 'section-style' %}">
+{%- if visible_count > 0 -%}
+  <announcement-bar
+    class="announcement-bar color-{{ section.settings.color_scheme }} section-frame"
+    style="{% render 'section-style' %}"
+    data-section-id="{{ section.id }}"
+    data-rotate="{{ is_rotating }}"
+    data-interval="{{ section.settings.rotation_speed }}"
+    data-dismissible="{{ section.settings.show_dismiss }}"
+  >
     <div class="page-width announcement-bar__inner">
-      <ul class="announcement-bar__list" role="list">
+      <ul class="announcement-bar__list{% if is_rotating %} announcement-bar__list--rotate{% endif %}" role="list">
         {%- for block in section.blocks -%}
           {%- if visible_ids contains block.id -%}
-            <li class="announcement-bar__item" {{ block.shopify_attributes }}>
+            <li
+              class="announcement-bar__item{% if is_rotating and forloop.first %} is-active{% endif %}"
+              style="{% render 'text-style', block: block %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.icon != 'none' -%}
+                {% render 'icon', icon: block.settings.icon %}
+              {%- endif -%}
               {%- if block.settings.link != blank -%}
                 {%- capture announcement_href -%}
                   {%- render 'localized-url', url: block.settings.link -%}
@@ -44,8 +69,18 @@
           {% render 'country-language-selector', id_prefix: 'announcement' %}
         </div>
       {%- endif -%}
+
+      {%- if section.settings.show_dismiss -%}
+        <button
+          type="button"
+          class="announcement-bar__dismiss"
+          aria-label="{{ 'sections.announcement_bar.dismiss' | t | escape }}"
+        >
+          {% render 'icon', icon: 'close' %}
+        </button>
+      {%- endif -%}
     </div>
-  </div>
+  </announcement-bar>
 {%- endif -%}
 
 {% schema %}
@@ -110,18 +145,9 @@
       "label": "Width",
       "default": "page",
       "options": [
-        {
-          "value": "page",
-          "label": "Contained"
-        },
-        {
-          "value": "wide",
-          "label": "Wide"
-        },
-        {
-          "value": "full",
-          "label": "Full width"
-        }
+        { "value": "page", "label": "Contained" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "full", "label": "Full width" }
       ]
     },
     {
@@ -151,23 +177,43 @@
       "label": "Color scheme",
       "default": "inverse",
       "options": [
-        {
-          "value": "default",
-          "label": "Default"
-        },
-        {
-          "value": "subdued",
-          "label": "Subdued"
-        },
-        {
-          "value": "inverse",
-          "label": "Inverse"
-        },
-        {
-          "value": "accent",
-          "label": "Accent"
-        }
+        { "value": "default", "label": "Default" },
+        { "value": "subdued", "label": "Subdued" },
+        { "value": "inverse", "label": "Inverse" },
+        { "value": "accent", "label": "Accent" }
       ]
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Multiple messages",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "Show all at once" },
+        { "value": "rotate", "label": "Rotate one at a time" }
+      ],
+      "info": "Only matters with more than one message."
+    },
+    {
+      "type": "range",
+      "id": "rotation_speed",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "label": "Rotation speed",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dismiss",
+      "label": "Let visitors dismiss the bar",
+      "default": false,
+      "info": "Stays dismissed for the rest of the visitor's session."
     },
     {
       "type": "checkbox",
@@ -181,6 +227,21 @@
       "type": "announcement",
       "name": "Announcement",
       "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "none",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "truck", "label": "Delivery" },
+            { "value": "shield", "label": "Warranty" },
+            { "value": "plug", "label": "Power" },
+            { "value": "refresh", "label": "Returns" },
+            { "value": "support", "label": "Support" },
+            { "value": "globe", "label": "Global" }
+          ]
+        },
         {
           "type": "text",
           "id": "text",
@@ -197,6 +258,28 @@
           "id": "countries",
           "label": "Show for countries",
           "info": "Comma-separated ISO country codes, for example US, CA, GB. Leave blank to show in every market."
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            { "value": "default", "label": "Default" },
+            { "value": "small", "label": "Small" },
+            { "value": "large", "label": "Large" },
+            { "value": "xlarge", "label": "Extra large" }
+          ]
         }
       ]
     }
@@ -204,17 +287,11 @@
   "presets": [
     {
       "name": "Announcement bar",
-      "blocks": [
-        {
-          "type": "announcement"
-        }
-      ]
+      "blocks": [{ "type": "announcement" }]
     }
   ],
   "enabled_on": {
-    "groups": [
-      "header"
-    ]
+    "groups": ["header"]
   }
 }
 {% endschema %}

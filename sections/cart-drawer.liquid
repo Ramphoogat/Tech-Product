@@ -23,6 +23,10 @@
       </button>
     </div>
 
+    {%- unless cart == empty -%}
+      {% render 'free-shipping-bar' %}
+    {%- endunless -%}
+
     {%- if cart == empty -%}
       <div class="cart-drawer__empty">
         <p class="h5">{{ 'sections.cart.empty' | t }}</p>

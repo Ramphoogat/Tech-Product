@@ -18,6 +18,8 @@
       <div class="cart-footer__summary">
         <h2 class="h5">{{ 'sections.cart.order_summary' | t }}</h2>
 
+        {% render 'free-shipping-bar' %}
+
         {%- if cart.cart_level_discount_applications.size > 0 -%}
           <ul class="cart-footer__discounts caption" role="list">
             {%- for discount in cart.cart_level_discount_applications -%}

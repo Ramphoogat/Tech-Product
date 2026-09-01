@@ -1,0 +1,40 @@
+{%- comment -%}
+  Free-shipping progress bar for the cart drawer and cart page footer.
+
+  The threshold is a plain number set in Theme settings > Cart, entered in
+  the store's default currency. It is compared directly against
+  cart.total_price (also in the shop's currency), so the comparison itself
+  is currency-safe; only the displayed remaining amount is passed through
+  the money filters so it renders in whatever currency the active market
+  uses. If a market's presentment currency differs enough from the shop's
+  default that the raw number stops being a meaningful threshold, override
+  it per market from Settings > Markets > (market) > cannot be done in
+  theme code — flag this to the merchant if they sell in very different
+  price ranges across markets.
+{%- endcomment -%}
+
+{%- if settings.enable_free_shipping_bar and settings.free_shipping_threshold > 0 -%}
+  {%- liquid
+    assign threshold_cents = settings.free_shipping_threshold | times: 100
+    assign remaining_cents = threshold_cents | minus: cart.total_price
+    assign progress = cart.total_price | times: 100.0 | divided_by: threshold_cents | at_most: 1
+    assign percent = progress | times: 100 | round
+  -%}
+  <div class="free-shipping-bar" data-free-shipping-bar>
+    <div class="free-shipping-bar__track">
+      <div class="free-shipping-bar__fill" style="--free-shipping-progress: {{ percent }}%;"></div>
+    </div>
+    <p class="free-shipping-bar__message" role="status">
+      {%- if remaining_cents <= 0 -%}
+        {{ 'sections.cart.free_shipping.qualified' | t }}
+      {%- else -%}
+        {%- if settings.currency_code_enabled -%}
+          {%- assign remaining_money = remaining_cents | money_with_currency -%}
+        {%- else -%}
+          {%- assign remaining_money = remaining_cents | money -%}
+        {%- endif -%}
+        {{ 'sections.cart.free_shipping.remaining' | t: amount: remaining_money }}
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}

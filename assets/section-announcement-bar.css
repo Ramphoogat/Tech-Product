@@ -1,3 +1,14 @@
+/*
+ * announcement-bar is a custom element with no browser default styling, so
+ * it defaults to display: inline unless told otherwise — same class of bug
+ * as the sticky header. Its parent (the header-group wrapper) is a plain
+ * block element, not a flex/grid container, so it needs this explicitly.
+ */
+announcement-bar {
+  display: block;
+  width: 100%;
+}
+
 .announcement-bar {
   background-color: var(--color-background);
   color: var(--color-text);
@@ -5,12 +16,14 @@
 }
 
 .announcement-bar__inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.6rem;
   min-height: 3.8rem;
   flex-wrap: wrap;
+  padding-inline-end: 3.6rem;
 }
 
 .announcement-bar__list {
@@ -23,6 +36,45 @@
   justify-content: center;
 }
 
+.announcement-bar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.announcement-bar__item .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: 0 0 auto;
+}
+
+/* Rotating mode shows one message at a time, faded in place of the others. */
+.announcement-bar__list--rotate {
+  display: block;
+  position: relative;
+  min-height: 2rem;
+}
+
+.announcement-bar__list--rotate .announcement-bar__item {
+  display: none;
+  justify-content: center;
+  width: 100%;
+}
+
+.announcement-bar__list--rotate .announcement-bar__item.is-active {
+  display: inline-flex;
+  animation: announcement-fade-in var(--duration-default) ease;
+}
+
+@keyframes announcement-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .announcement-bar__link {
   color: inherit;
   text-underline-offset: 0.3rem;
@@ -30,4 +82,29 @@
 
 .announcement-bar__localization {
   margin-inline-start: auto;
+}
+
+.announcement-bar__dismiss {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.announcement-bar__dismiss:hover {
+  opacity: 1;
+}
+
+.announcement-bar__dismiss .icon {
+  width: 1.4rem;
+  height: 1.4rem;
 }

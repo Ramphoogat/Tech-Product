@@ -3,9 +3,9 @@
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'heading' -%}
-          <h2 class="h3" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          <h2 class="h3" style="{% render 'text-style', block: block %}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
         {%- when 'text' -%}
-          <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          <div class="rte" style="{% render 'text-style', block: block %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
         {%- when 'button' -%}
           {%- if block.settings.button_label != blank -%}
             {%- capture rich_text_href -%}
@@ -166,6 +166,40 @@
           "id": "heading",
           "label": "Heading",
           "default": "Engineered here, supported everywhere"
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Extra large"
+            }
+          ]
         }
       ]
     },
@@ -179,6 +213,40 @@
           "id": "text",
           "label": "Text",
           "default": "<p>Say something about your brand.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Extra large"
+            }
+          ]
         }
       ]
     },

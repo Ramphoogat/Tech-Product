@@ -1,0 +1,33 @@
+{%- comment -%}
+  Inline style for a block's "Text style" controls: color and size.
+  Every block that includes this expects the matching settings (see the
+  TEXT_STYLE_SETTINGS block below, pasted into the block's schema):
+
+    { "type": "header", "content": "Text style" },
+    { "type": "color", "id": "text_color", "label": "Text color", "info": "Leave blank to use the section's text color." },
+    { "type": "select", "id": "text_size", "label": "Text size", "default": "default", "options": [
+      { "value": "default", "label": "Default" },
+      { "value": "small", "label": "Small" },
+      { "value": "large", "label": "Large" },
+      { "value": "xlarge", "label": "Extra large" }
+    ]}
+
+  Both are optional and no-ops at their defaults, so adding this to a block
+  never changes its existing look until someone sets a color or size.
+
+  Usage on the block's rendered element:
+    <h2 style="{% render 'text-style', block: block %}">
+
+  Accepts: block.
+{%- endcomment -%}
+
+{%- liquid
+  assign color = block.settings.text_color
+  assign size = block.settings.text_size
+-%}
+{%- if color != blank -%}color: {{ color }};{%- endif -%}
+{%- case size -%}
+  {%- when 'small' -%}font-size: 1.3rem;
+  {%- when 'large' -%}font-size: 2rem;
+  {%- when 'xlarge' -%}font-size: 2.8rem;
+{%- endcase -%}

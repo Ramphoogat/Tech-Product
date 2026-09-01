@@ -180,6 +180,9 @@
       "payment_methods": "Payment methods",
       "follow_us": "Follow us"
     },
+    "announcement_bar": {
+      "dismiss": "Dismiss announcement"
+    },
     "cart": {
       "title": "Your cart",
       "drawer_title": "Your cart",
@@ -203,6 +206,10 @@
       "login": {
         "title": "Have an account?",
         "paragraph_html": "<a href=\"{{ link }}\" class=\"link\">Log in</a> to check out faster."
+      },
+      "free_shipping": {
+        "remaining": "Add {{ amount }} more for free shipping",
+        "qualified": "Your order qualifies for free shipping"
       }
     },
     "collection_template": {

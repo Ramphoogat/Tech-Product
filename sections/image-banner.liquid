@@ -22,9 +22,9 @@
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'heading' -%}
-          <h2 class="image-banner__heading h1" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          <h2 class="image-banner__heading h1" style="{% render 'text-style', block: block %}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
         {%- when 'text' -%}
-          <div class="image-banner__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          <div class="image-banner__text rte" style="{% render 'text-style', block: block %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
         {%- when 'buttons' -%}
           <div class="image-banner__buttons" {{ block.shopify_attributes }}>
             {%- if block.settings.button_label_1 != blank -%}
@@ -230,6 +230,40 @@
           "id": "heading",
           "label": "Heading",
           "default": "Built for the way you work"
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Extra large"
+            }
+          ]
         }
       ]
     },
@@ -243,6 +277,40 @@
           "id": "text",
           "label": "Text",
           "default": "<p>Ships worldwide with region-correct power adapters.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "info": "Leave blank to use the section's text color."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            },
+            {
+              "value": "xlarge",
+              "label": "Extra large"
+            }
+          ]
         }
       ]
     },
